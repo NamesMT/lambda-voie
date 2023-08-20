@@ -1,7 +1,7 @@
 {
   "name": "lambda-voie",
   "type": "module",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "packageManager": "pnpm@8.6.12",
   "description": "Routing/middleware engine for AWS Lambda",
   "author": "NamesMT <dangquoctrung123@gmail.com>",
@@ -55,7 +55,6 @@
   },
   "devDependencies": {
     "@antfu/eslint-config": "^0.40.2",
-    "@types/aws-lambda": "^8.10.119",
     "@types/node": "^20.5.1",
     "@unocss/eslint-config": "^0.55.2",
     "bumpp": "^9.2.0",
