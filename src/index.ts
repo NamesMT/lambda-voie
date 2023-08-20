@@ -268,4 +268,3 @@ class Router {
 // }
 
 export class Voie extends Router { }
-export default Voie
