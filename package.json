@@ -54,14 +54,14 @@
     "pino-lambda": "^4.2.1"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^0.39.8",
+    "@antfu/eslint-config": "^0.40.2",
     "@types/aws-lambda": "^8.10.119",
-    "@types/node": "^18.17.6",
-    "@unocss/eslint-config": "^0.53.6",
+    "@types/node": "^20.5.1",
+    "@unocss/eslint-config": "^0.55.2",
     "bumpp": "^9.2.0",
     "cross-env": "^7.0.3",
     "eslint": "^8.47.0",
-    "eslint-config-prettier": "^8.10.0",
+    "eslint-config-prettier": "^9.0.0",
     "eslint-config-turbo": "^1.10.12",
     "jiti": "^1.19.3",
     "nodemon": "^3.0.1",
@@ -69,6 +69,6 @@
     "pnpm": "^8.6.12",
     "typescript": "^5.1.6",
     "unbuild": "^1.2.1",
-    "vitest": "^0.31.4"
+    "vitest": "^0.34.2"
   }
 }
