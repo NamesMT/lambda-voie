@@ -26,7 +26,7 @@ export function oGet(obj: any, path: string | string[], create?: boolean) {
       prev[curr] = prev[curr] ?? {}
 
     return prev && prev[curr]
-  }, obj || self)
+  }, obj)
 }
 
 export function oSet(obj: any, path: string | string[], value: any, create = true) {
