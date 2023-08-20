@@ -1,0 +1,74 @@
+{
+  "name": "lambda-voie",
+  "type": "module",
+  "version": "0.0.0",
+  "packageManager": "pnpm@8.6.0",
+  "description": "Routing/middleware engine for AWS Lambda",
+  "author": "NamesMT <dangquoctrung123@gmail.com>",
+  "license": "MIT",
+  "funding": "https://github.com/sponsors/namesmt",
+  "homepage": "https://github.com/namesmt/lambda-voie#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/namesmt/lambda-voie.git"
+  },
+  "bugs": "https://github.com/namesmt/lambda-voie/issues",
+  "keywords": [],
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.mjs"
+    }
+  },
+  "main": "./dist/index.mjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./dist/*",
+        "./dist/index.d.ts"
+      ]
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "unbuild",
+    "stub": "unbuild --stub",
+    "dev": "pnpm start-watch",
+    "lint": "eslint .",
+    "prepublishOnly": "pnpm build",
+    "release": "bumpp && npm publish",
+    "start": "cross-env isLocal=true jiti src/index.ts | pino-pretty",
+    "start-watch": "cross-env isLocal=true nodemon src/index.ts | pino-pretty",
+    "test": "cross-env isLocal=true vitest --test-timeout=0",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "find-my-way": "^7.6.2",
+    "pino": "^8.14.1",
+    "pino-lambda": "^4.2.1"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "^0.39.7",
+    "@types/aws-lambda": "^8.10.119",
+    "@types/node": "^18.16.16",
+    "@unocss/eslint-config": "^0.53.4",
+    "bumpp": "^9.1.0",
+    "cross-env": "^7.0.3",
+    "eslint": "^8.41.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-config-turbo": "^1.10.7",
+    "jiti": "^1.19.1",
+    "nodemon": "^3.0.1",
+    "pino-pretty": "^10.0.1",
+    "pnpm": "^8.6.0",
+    "typescript": "^5.0.4",
+    "unbuild": "^1.2.1",
+    "vitest": "^0.31.3"
+  }
+}
