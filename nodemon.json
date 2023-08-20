@@ -8,6 +8,6 @@
   ],
   "ext": "ts,js,json",
   "events": {
-    "restart":"clear || cls"
+    "restart": "clear || cls"
   }
 }
