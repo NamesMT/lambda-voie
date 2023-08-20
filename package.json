@@ -1,7 +1,7 @@
 {
   "name": "lambda-voie",
   "type": "module",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "packageManager": "pnpm@8.6.12",
   "description": "Routing/middleware engine for AWS Lambda",
   "author": "NamesMT <dangquoctrung123@gmail.com>",
@@ -13,7 +13,14 @@
     "url": "git+https://github.com/namesmt/lambda-voie.git"
   },
   "bugs": "https://github.com/namesmt/lambda-voie/issues",
-  "keywords": [],
+  "keywords": [
+    "aws",
+    "lambda",
+    "router",
+    "routing",
+    "middleware",
+    "engine"
+  ],
   "sideEffects": false,
   "exports": {
     ".": {
