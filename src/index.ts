@@ -6,7 +6,7 @@ import { logger } from './logger'
 import { oGet, oPathEscape, oSet, response } from './utils'
 
 interface FMWRoute {
-  handler: Handler<HTTPVersion.V2>
+  handler: Handler<HTTPVersion.V1>
   method: HTTPMethod
   path: string
   pattern?: string
@@ -89,7 +89,7 @@ export interface EventRoute extends Omit<Route, 'handler' | 'method' | 'path' | 
 
 class Router {
   #logger: Logger
-  #router: ReturnType<typeof FindMyWay>
+  #router: ReturnType<typeof FindMyWay<HTTPVersion.V1>>
 
   routes: Record<string, Route> = {}
   eventRoutes: Record<string, Record<string, EventRoute>> = {}
