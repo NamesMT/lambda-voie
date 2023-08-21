@@ -206,16 +206,31 @@ class Router {
     return this.makeLambdaHandler()
   }
 
-  makeOnHandler(route: Route) {
-    return (req: any, res: any, params: { [k: string]: string | undefined }, store: any, searchParams: { [k: string]: string }) => {
+  _lookupTransform(fn: (lookupData: {
+    method: string
+    url: string
+    event: LambdaHandlerEvent
+    context: LambdaHandlerContext
+    params: { [k: string]: string | undefined }
+    store: any
+    searchParams: { [k: string]: string }
+  }) => any): FMWRoute['handler'] {
+    return (req, res, params, store, searchParams) => {
       const { method, url } = req as { method: string; url: string }
-      const { event, context } = res as { event: LambdaHandlerEvent; context: LambdaHandlerContext }
+      const { event, context } = res as any as { event: LambdaHandlerEvent; context: LambdaHandlerContext }
+
+      return fn({ method, url, event, context, params, store, searchParams })
+    }
+  }
+
+  makeOnHandler(route: Route) {
+    return this._lookupTransform(({ method, url, event, context, params, store, searchParams }) => {
       const requestParams = { ...searchParams, ...params }
 
       event.route = { method, url, params: requestParams }
 
       return this.routeHandler(route, event, context)
-    }
+    })
   }
 
   makeLambdaHandler() {
