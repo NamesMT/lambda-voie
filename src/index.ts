@@ -15,10 +15,10 @@ interface FMWRoute {
   store?: Record<any, any>
 }
 
-type LambdaHandler<TEvent = any, TResult = any> = (
-  event: TEvent,
-  context: Context,
-) => void | Promise<TResult>
+type LambdaHandler = (
+  event: LambdaHandlerEvent,
+  context: LambdaHandlerContext,
+) => void | Promise<any>
 
 type LambdaHandlerEvent = any
 type LambdaHandlerContext = Context
@@ -235,7 +235,7 @@ class Router {
   }
 
   makeLambdaHandler(): LambdaHandler {
-    return async (event: LambdaHandlerEvent, context: Context) => {
+    return async (event: LambdaHandlerEvent, context: LambdaHandlerContext) => {
       try {
         if (event.Records) {
           for (const Record of event.Records as LambdaEventRecord[]) {
