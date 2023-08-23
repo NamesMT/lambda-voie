@@ -199,10 +199,11 @@ class Router {
     return res
   }
 
-  handle(): LambdaHandler {
+  handle() {
     Object.values(this.routes).forEach((route) => {
       this.#router.on(route.method, route.path, this.makeOnHandler(route))
     })
+
     return this.makeLambdaHandler()
   }
 
@@ -233,7 +234,7 @@ class Router {
     })
   }
 
-  makeLambdaHandler() {
+  makeLambdaHandler(): LambdaHandler {
     return async (event: LambdaHandlerEvent, context: Context) => {
       try {
         if (event.Records) {
