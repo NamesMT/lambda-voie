@@ -91,6 +91,8 @@ export interface EventRoute extends Omit<Route, 'handler' | 'method' | 'path' | 
   after(fn: RouteMiddlewareAfter<LambdaEventRecord>): this
 }
 
+// TODO: maybe we should move base Router class to a new minimal not opinionated package?
+// TODO: consider patching and ship customized version of find-my-way instead of using too much type overriding.
 class Router {
   #logger: Logger
   #router: ReturnType<typeof FindMyWay<HTTPVersion.V1>>
