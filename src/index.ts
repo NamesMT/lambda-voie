@@ -95,7 +95,7 @@ export interface EventRoute extends Omit<Route, 'handler' | 'method' | 'path' | 
 // TODO: consider patching and ship customized version of find-my-way instead of using too much type overriding.
 class Router {
   logger: Logger
-  #router: ReturnType<typeof FindMyWay<HTTPVersion.V1>>
+  router: ReturnType<typeof FindMyWay<HTTPVersion.V1>>
 
   routes: Record<string, Route> = {}
   eventRoutes: Record<string, Record<string, EventRoute>> = {}
@@ -107,7 +107,7 @@ class Router {
     } = options
 
     this.logger = _logger
-    this.#router = FindMyWay({
+    this.router = FindMyWay({
       // @ts-expect-error defaultRoute not compatible
       defaultRoute,
     })
@@ -207,7 +207,7 @@ class Router {
 
   handle() {
     Object.values(this.routes).forEach((route) => {
-      this.#router.on(route.method, route.path, this.makeOnHandler(route))
+      this.router.on(route.method, route.path, this.makeOnHandler(route))
     })
 
     return this.makeLambdaHandler()
@@ -259,7 +259,7 @@ class Router {
         // Using 'as any' to suppress find-my-way req and res type-check errors, it's just sugar typing and doesn't really affect anything
         // Also, correct-cast the return of lookup to Route['handler'] ReturnType
         // Currently Cast to Promise for development purposes
-        const result = this.#router.lookup({ method: event.requestContext.http.method, url: event.rawPath } as any, { event, context } as any) as ReturnType<Route['handler']>
+        const result = this.router.lookup({ method: event.requestContext.http.method, url: event.rawPath } as any, { event, context } as any) as ReturnType<Route['handler']>
         return await result
       }
       catch (err) {
