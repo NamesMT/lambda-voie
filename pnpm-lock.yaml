@@ -14,6 +14,9 @@ dependencies:
   pino-lambda:
     specifier: ^4.2.1
     version: 4.2.1(pino@8.15.0)
+  readable-http-codes:
+    specifier: ^1.1.1
+    version: 1.1.1
 
 devDependencies:
   '@antfu/eslint-config':
@@ -3567,6 +3570,10 @@ packages:
       parse-json: 5.2.0
       type-fest: 0.6.0
     dev: true
+
+  /readable-http-codes@1.1.1:
+    resolution: {integrity: sha512-M+u7iokHWtqEXmeeLuPztJrWnS6kMvqDWEg/Ho7i1hqVv64ROJLqf0U0PHhwQJo9Q7lynj25sbDG8hljdLEfHg==}
+    dev: false
 
   /readable-stream@3.6.2:
     resolution: {integrity: sha512-9u/sniCrY3D5WdsERHzHE4G2YCXqoG5FTHUiCC4SIbr6XcLZBY05ya9EKjYek9O5xOAwjGq+1JdGBAS7Q9ScoA==}

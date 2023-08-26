@@ -58,7 +58,8 @@
   "dependencies": {
     "find-my-way": "^7.6.2",
     "pino": "^8.15.0",
-    "pino-lambda": "^4.2.1"
+    "pino-lambda": "^4.2.1",
+    "readable-http-codes": "^1.1.1"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^0.40.2",
