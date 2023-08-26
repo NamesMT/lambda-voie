@@ -45,6 +45,8 @@ const app = new Voie({
   })
 })
 
+app.logger.info('hi') // You can also access the logger this way
+
 // Register the route (GET /test)
 app.route('GET', '/test', (event, context) =>
   ({

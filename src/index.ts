@@ -94,7 +94,7 @@ export interface EventRoute extends Omit<Route, 'handler' | 'method' | 'path' | 
 // TODO: maybe we should move base Router class to a new minimal not opinionated package?
 // TODO: consider patching and ship customized version of find-my-way instead of using too much type overriding.
 class Router {
-  #logger: Logger
+  logger: Logger
   #router: ReturnType<typeof FindMyWay<HTTPVersion.V1>>
 
   routes: Record<string, Route> = {}
@@ -106,7 +106,7 @@ class Router {
       defaultRoute = () => ({ statusCode: 500, message: 'defaultRoute' }),
     } = options
 
-    this.#logger = _logger
+    this.logger = _logger
     this.#router = FindMyWay({
       // @ts-expect-error defaultRoute not compatible
       defaultRoute,
@@ -116,7 +116,7 @@ class Router {
   eventRoute(eventSource: EventRoute['eventSource'], name: EventRoute['name']): EventRoute | undefined
   eventRoute(eventSource: EventRoute['eventSource'], name: EventRoute['name'], handler: EventRoute['handler'], options?: { override?: boolean }): EventRoute
   eventRoute(eventSource: EventRoute['eventSource'], name: EventRoute['name'], handler?: EventRoute['handler'], options: { override?: boolean } = {}) {
-    this.#logger.trace({ eventSource, name, handler, options }, 'eventRoute()')
+    this.logger.trace({ eventSource, name, handler, options }, 'eventRoute()')
 
     const {
       override = false,
@@ -125,7 +125,7 @@ class Router {
     const _route = oGet(this.eventRoutes, `${oPathEscape(eventSource)}.${oPathEscape(name)}`)
     if (!_route) {
       if (!handler) {
-        this.#logger.debug('No route nor handler')
+        this.logger.debug('No route nor handler')
         return
       }
 
@@ -156,7 +156,7 @@ class Router {
   route(method: Route['method'], path: Route['path']): Route | undefined
   route(method: Route['method'], path: Route['path'], handler: Route['handler'], options?: { override?: boolean }): Route
   route(method: Route['method'], path: Route['path'], handler?: Route['handler'], options: { override?: boolean } = {}) {
-    this.#logger.trace({ method, path, handler, options }, 'route()')
+    this.logger.trace({ method, path, handler, options }, 'route()')
 
     const {
       override = false,
@@ -165,7 +165,7 @@ class Router {
     const _route = this.routes[`${method} ${path}`]
     if (!_route) {
       if (!handler) {
-        this.#logger.debug('No route nor handler')
+        this.logger.debug('No route nor handler')
         return
       }
 
