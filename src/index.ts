@@ -5,7 +5,7 @@ import type { Logger } from 'pino'
 import { logger } from './logger'
 import { oGet, oPathEscape, oSet, response } from './utils'
 
-// TODO: put all types to types.ts and export them (after this is fixed: https://github.com/unjs/unbuild/issues/303)
+// TODO: cleaning up/reordering and put all types to types.ts and export them (after this is fixed: https://github.com/unjs/unbuild/issues/303)
 
 interface FMWRoute {
   handler: Handler<HTTPVersion.V1>
@@ -20,10 +20,12 @@ interface FMWRoute {
 type LambdaHandler = (
   event: LambdaHandlerEvent,
   context: LambdaHandlerContext,
-) => void | Promise<any>
+) => void | Promise<LambdaHandlerResponse>
 
 type LambdaHandlerEvent = any
 type LambdaHandlerContext = Context
+// TODO: map to @types/aws-lambda.APIGatewayProxyResult (again, after unbuild#303 is fixed)
+type LambdaHandlerResponse = any
 
 interface LambdaEventRecord {
   eventVersion: string
