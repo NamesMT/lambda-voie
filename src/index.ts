@@ -277,21 +277,6 @@ class Router {
   }
 }
 
-// export class Voie extends Router {
-//   // routes: Record<string, Route> = {}
-
-//   constructor(options: { logger?: Logger; defaultRoute?: Route['handler'] } = {}) {
-//     super(options)
-//   }
-
-//   // route(method: Route['method'], path: Route['path']): Route | undefined
-//   // route(method: Route['method'], path: Route['path'], handler: Route['handler'], options?: { override?: boolean }): Route
-//   // route(method: Route['method'], path: Route['path'], handler?: Route['handler'], options: { override?: boolean } = {}) {
-//   //   // @ts-expect-error ts-2345
-//   //   return super.route(method, path, handler, options)
-//   // }
-// }
-
 export class Voie extends Router {
   response(
     statusCode: StatusCodes,
