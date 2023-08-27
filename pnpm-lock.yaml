@@ -5,6 +5,9 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
+  filter-obj:
+    specifier: ^5.1.0
+    version: 5.1.0
   find-my-way:
     specifier: ^7.6.2
     version: 7.6.2
@@ -2438,6 +2441,11 @@ packages:
     dependencies:
       to-regex-range: 5.0.1
     dev: true
+
+  /filter-obj@5.1.0:
+    resolution: {integrity: sha512-qWeTREPoT7I0bifpPUXtxkZJ1XJzxWtfoWWkdVGqa+eCr3SHW/Ocp89o8vLvbUuQnadybJpjOKu4V+RwO6sGng==}
+    engines: {node: '>=14.16'}
+    dev: false
 
   /find-my-way@7.6.2:
     resolution: {integrity: sha512-0OjHn1b1nCX3eVbm9ByeEHiscPYiHLfhei1wOUU9qffQkk98wE0Lo8VrVYfSGMgnSnDh86DxedduAnBf4nwUEw==}

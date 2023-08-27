@@ -1,9 +1,17 @@
+// TODO: make a personal utils repo with all the goodies
+
 export function response(statusCode: number, message: string, data?: Record<any, any>) {
   return {
     statusCode,
     message,
     ...data,
   }
+}
+
+export function stringToSet(string: string) {
+  return new Set(
+    string.split(',').map(str => str.trim()),
+  )
 }
 
 export const oPathEscape = (str: string) => str.replaceAll('.', '`o\\.')

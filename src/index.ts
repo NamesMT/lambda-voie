@@ -1,9 +1,12 @@
+import { brotliCompressSync, gzipSync, constants as zlibConstants } from 'node:zlib'
 import type { Context } from 'aws-lambda'
 import type { HTTPMethod, HTTPVersion, Handler, RouteOptions } from 'find-my-way'
 import FindMyWay from 'find-my-way'
 import type { Logger } from 'pino'
+import type { StatusCodes } from 'readable-http-codes'
+import { includeKeys } from 'filter-obj'
 import { logger } from './logger'
-import { oGet, oPathEscape, oSet, response } from './utils'
+import { oGet, oPathEscape, oSet, response, stringToSet } from './utils'
 
 // TODO: cleaning up/reordering and put all types to types.ts and export them (after this is fixed: https://github.com/unjs/unbuild/issues/303)
 
@@ -70,7 +73,7 @@ class _RouterProto1 extends FMW {
 }
 // end prototype 1
 type RouteMiddlewareBefore<D> = (data: D, context: LambdaHandlerContext) => void
-type RouteMiddlewareAfter<D> = (data: D, context: LambdaHandlerContext, res: any) => void | any
+type RouteMiddlewareAfter<D> = (data: D, context: LambdaHandlerContext, res: LambdaHandlerResponse) => void | any
 export interface Route extends Pick<FMWRoute, 'method' | 'path'> {
   handler: (event: LambdaHandlerEvent, context: LambdaHandlerContext) => any
   befores: RouteMiddlewareBefore<LambdaHandlerEvent>[]
@@ -289,5 +292,111 @@ class Router {
 //   // }
 // }
 
-export class Voie extends Router { }
+export class Voie extends Router {
+  response(
+    statusCode: StatusCodes,
+    body: any,
+    options: {
+      event?: LambdaHandlerEvent
+
+      headers?: Record<string, string>
+      cookies?: Record<string, string> | Array<string>
+      autoAllow?: boolean
+      autoCors?: boolean
+      compress?: false | 'auto' | number
+      contentType?: string | false
+    } = {},
+  ): LambdaHandlerResponse {
+    this.logger.trace({ statusCode, body, options }, 'response()')
+
+    const {
+      event,
+      headers = {},
+      cookies,
+      autoAllow = true,
+      autoCors,
+      compress,
+      contentType = 'application/json',
+    } = options
+
+    if (!event && (autoCors || compress))
+      throw new Error('event option is required if enabled: autoCors | compress')
+
+    const responseObject: LambdaHandlerResponse = {
+      statusCode,
+      headers: {
+        ...autoAllow
+          ? {
+              'Access-Control-Allow-Origin': '*',
+              'Access-Control-Allow-Headers': 'Access-Control-Allow-Headers, Origin, Accept, X-Requested-With, Content-Type, Content-Encoding, Access-Control-Request-Method, Access-Control-Request-Headers, *',
+              'Access-Control-Allow-Methods': '*',
+              'Access-Control-Expose-Headers': '*',
+            }
+          : undefined,
+
+        ...autoCors
+          ? {
+              'Access-Control-Allow-Origin': event.headers.origin,
+              'Access-Control-Allow-Credentials': true,
+            }
+          : undefined,
+
+        ...contentType
+          ? {
+              'Content-Type': 'application/json',
+            }
+          : undefined,
+
+        ...headers,
+      },
+      body: JSON.stringify(body),
+    }
+
+    if (cookies) {
+      if (!Array.isArray(cookies)) {
+        const cookiesArr = []
+        for (const key in cookies)
+          cookiesArr.push(`${key}=${cookies[key]}`)
+
+        responseObject.cookies = cookiesArr
+      }
+      responseObject.cookies = cookies
+    }
+
+    // Note: Each character of JSON.stringify is UTF-16, which is most cases 2 bytes
+    // Skips if compress is auto and body is less than 100kB
+    if (compress && !(compress === 'auto' && responseObject.body.length < 50000)) {
+      const acceptableEncodings = event.headers['accept-encoding'] && stringToSet(event.headers['accept-encoding'])
+      if (acceptableEncodings) {
+        const compressLevel = compress === 'auto'
+          ? responseObject.body.length < 1000000 // ~2MB
+            ? 6
+            : 1
+          : compress
+
+        if (acceptableEncodings.has('br') || acceptableEncodings.has('*')) {
+          responseObject.body = brotliCompressSync(responseObject.body, { params: { [zlibConstants.BROTLI_PARAM_QUALITY]: compressLevel } })
+          responseObject.headers['Content-Encoding'] = 'br'
+        }
+        else if (acceptableEncodings.has('gzip')) {
+          responseObject.body = gzipSync(responseObject.body, { level: compressLevel })
+          responseObject.headers['Content-Encoding'] = 'gzip'
+        }
+
+        if (responseObject.headers['Content-Encoding']) {
+          responseObject.body = responseObject.body.toString('base64')
+          responseObject.isBase64Encoded = true
+        }
+      }
+    }
+
+    this.logger.info({
+      statusCode,
+      info: typeof body === 'object' ? includeKeys(body, ['message', 'notice']) : body,
+    })
+
+    return responseObject
+  }
+}
+
 export { logger }
