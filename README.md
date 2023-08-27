@@ -3,13 +3,18 @@
 **Voie** (French word for "way/path/lane/route", English for... "Very Opinionated Itinerary Editor"?)  
 Nah, just a random word I came up for this package, haha.  
 
-**Voie** is a simple router + middleware wrapper/engine for AWS Lambda, it utilizes:
-+ [find-my-way](https://github.com/delvedor/find-my-way), which is:  
-  > A crazy fast HTTP router, internally uses an highly performant [Radix Tree](https://en.wikipedia.org/wiki/Radix_tree) (aka compact [Prefix Tree](https://en.wikipedia.org/wiki/Trie)), supports route params, wildcards, and it's framework independent.
+**Voie** is a simple router + middleware wrapper/engine for AWS Lambda with the main purpose of making things easier.
+
+## Features
+
+- [**find-my-way:**](https://github.com/delvedor/find-my-way) A **crazy fast** (used by [Fastify](https://fastify.dev/benchmarks)) HTTP router, internally uses an highly performant Radix Tree (aka compact Prefix Tree), supports route params, wildcards.
+- **Clean syntax:** `app.route(method, path, handler)`, chainable to add middlewares easily: [Example](#deployed-indexmjs-example)
+- **Packed to relieve headache:**
+  - **response(statusCode, body, options):** with support for `autoCors` and `compress` (you still need to define the OPTIONS route (WIP to remove this))
 
 ## Usage
 
-Install package:
+### Install package:
 
 ```sh
 # npm
@@ -22,30 +27,34 @@ yarn add lambda-voie
 pnpm install lambda-voie
 ```
 
-Import:
+### Import:
 
 ```ts
 // ESM
 import { Voie } from 'lambda-voie'
 ```
 
-Example deployed Lambda `index.mjs`:
+### Deployed `index.mjs` example:
 ```ts
 import {
   Voie,
-  logger, // Voie includes a pino-logger configured for Lambda
+  // Voie includes a pino-logger configured for Lambda
+  logger, 
 } from 'lambda-voie'
 
 const app = new Voie({
-  // logger: console // You can pass in your own logger
+  // You can pass in your own logger:
+  // logger: console
   defaultRoute: (event, context) => ({
     statusCode: 500,
     message: 'Route not found',
-    routeInfo: event.route // Voie by default adds a route object to event for easy access: { method, path, params }
+    // Voie by default adds a route object to event for easy access: { method, path, params }
+    routeInfo: event.route
   })
 })
 
-app.logger.info('hi') // You can also access the logger this way
+// You can also access the logger this way
+app.logger.info('hi')
 
 // Register the route (GET /test)
 app.route('GET', '/test', (event, context) =>
@@ -61,7 +70,7 @@ app.route('GET', '/test', (event, context) =>
   .before((event, context) => { event.addedByBefore = 'Hi' })
   .after((event, context, res) => { res.willBeChangedByAfter = 'So Ezzzz' })
 
-// You can get registered route by calling the same function omit the handler:
+// You can get registered route by calling the same function (omit the handler):
 app.route('GET', '/test')
   .before((event, context) => { event.addedByBefore2 = 'Hi' })
 
@@ -71,7 +80,7 @@ app.eventRoute('aws:s3', 'log S3 PutObject', (Record, context) => {
     logger.info(`S3 Put: ${Record.s3.bucket.name}/${Record.s3.object.key}`)
 })
 
-// Export the handler from handle() function for AWS Lambda
+// Export the handler from handle() function and we're ready for Lambda!
 export const handler = app.handle()
 ```
 
@@ -92,6 +101,19 @@ class MyVoie extends Voie {
   }
 }
 ```
+
+## Roadmap
+
+- [ ] Refactor autoCors option
+  > (currently we have to both set the option and register the OPTIONS route)
+- [ ] Split the base router class to another repo?
+- [ ] Creates a template (boiler-plate) repo
+- [ ] Includes some advanced examples
+- [ ] Make it easy to test routes locally
+- [ ] Find a way to supports?: [**response streaming**](https://aws.amazon.com/blogs/compute/introducing-aws-lambda-response-streaming/)
+  - [Referrence Resource 1](https://github.com/astuyve/lambda-stream)
+  - [Referrence Resource 2](https://advancedweb.hu/how-to-use-the-aws-lambda-streaming-response-type/)
+  - [Referrence Resource 3](https://github.com/dherault/serverless-offline/issues/1681)
 
 ## License
 
