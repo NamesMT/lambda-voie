@@ -1,5 +1,14 @@
 // TODO: make a personal utils repo with all the goodies
 
+export function tryIt(fn: () => any, fallbackValue?: any) {
+  try {
+    return fn()
+  }
+  catch (error) {
+    return fallbackValue
+  }
+}
+
 export function response(statusCode: number, message: string, data?: Record<any, any>) {
   return {
     statusCode,

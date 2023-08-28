@@ -6,7 +6,7 @@ import type { Logger } from 'pino'
 import type { StatusCodes } from 'readable-http-codes'
 import { includeKeys } from 'filter-obj'
 import { logger } from './logger'
-import { oGet, oPathEscape, oSet, response, stringToSet } from './utils'
+import { oGet, oPathEscape, oSet, response, stringToSet, tryIt } from './utils'
 
 // TODO: cleaning up/reordering and put all types to types.ts and export them (after this is fixed: https://github.com/unjs/unbuild/issues/303)
 
@@ -213,8 +213,17 @@ class Router {
 
   makeOnHandler(route: Route) {
     return this._lookupTransform(({ method, url, event, context, params, searchParams }) => {
+      const postBody = tryIt(() =>
+        (typeof event.body === 'string')
+          ? (event.body[0] === '{')
+              ? JSON.parse(event.body)
+              : { string_body: event.body }
+          : (typeof event.body === 'object' ? event.body : undefined),
+      )
+      // Based on first visibility overrides: ://api.call/:parametric(params)?searchParams - (POST body)
+      const allParams = { ...postBody, ...searchParams, ...params }
 
-      event.route = { method, url, params: requestParams }
+      event.route = { method, url, params: allParams }
 
       return this.routeHandler(route, event, context)
     })
