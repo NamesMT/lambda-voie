@@ -46,32 +46,6 @@ interface LambdaEventRecord {
   [key: string]: any
 }
 
-/*
-  Prototype 1 using class hack and extends in-place 'find-my-way', issue:
-  - cannot define new methods in Router (if return a new object from FMW constructor)
-  - FMW instance doesn't contains methods (prototype chain) (if using Object.assign)
- */
-interface FMWClassHack { new(): ReturnType<typeof FindMyWay> }
-const FMW = (function (this: any) {
-  const _instance = FindMyWay()
-  return _instance
-  // return Object.assign(this, Object.create(Object.getPrototypeOf(_instance), Object.getOwnPropertyDescriptors(_instance)))
-}) as any as FMWClassHack
-
-class _RouterProto1 extends FMW {
-  routesMapped: Record<string, FMWRoute> = {}
-  routes: FMWRoute[] = []
-
-  constructor() {
-    super()
-  }
-
-  route() {
-    // eslint-disable-next-line no-console
-    return console.log('This method doesn\'t exist on new instances')
-  }
-}
-// end prototype 1
 type RouteMiddlewareBefore<D> = (data: D, context: LambdaHandlerContext) => void
 type RouteMiddlewareAfter<D> = (data: D, context: LambdaHandlerContext, res: LambdaHandlerResponse) => void | any
 export interface Route extends Pick<FMWRoute, 'method' | 'path'> {
