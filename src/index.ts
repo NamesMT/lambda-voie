@@ -225,9 +225,14 @@ class Router {
     store: any
     searchParams: { [k: string]: string }
   }) => any): FMWRoute['handler'] {
-    return (req, res, params, store, searchParams) => {
+    return (req, res, params, store) => {
       const { method, url } = req as { method: string; url: string }
       const { event, context } = res as any as { event: LambdaHandlerEvent; context: LambdaHandlerContext }
+      // We will use searchParams data from AWS's event object
+      // Because the event.rawPath passed to find-my-way doesn't include searchParams
+      // We also doesn't need to disable the internal query parser because it's already optimized if empty:
+      // https://github.com/delvedor/find-my-way/blob/ec25619ac06c16f9aabcab54995ce96f91390a62/index.js#L82
+      const searchParams = event.queryStringParameters
 
       return fn({ method, url, event, context, params, store, searchParams })
     }
