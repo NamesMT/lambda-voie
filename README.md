@@ -10,6 +10,9 @@ Nah, just a random word I came up for this package, haha.
 - [**find-my-way:**](https://github.com/delvedor/find-my-way) A **crazy fast** (used by [Fastify](https://fastify.dev/benchmarks)) HTTP router, internally uses an highly performant Radix Tree (aka compact Prefix Tree), supports route params, wildcards.
 - **Clean syntax:** `app.route(method, path, handler)`, chainable to add middlewares easily: [Example](#deployed-indexmjs-example)
 - **Packed to relieve headache:**
+  - **event.route:** easy access object that contains:
+    - **{** **method**, **route**, **params:** postBody+searchParams+[parametricRoute](https://github.com/delvedor/find-my-way#supported-path-formats) **}**
+    - **postBody:** event.body is automatically parsed and added to params if is object type
   - **response(statusCode, body, options):** with support for `autoCors` and `compress` (you still need to define the OPTIONS route (WIP to remove this))
 
 ## Usage
@@ -39,7 +42,7 @@ import { Voie } from 'lambda-voie'
 import {
   Voie,
   // Voie includes a pino-logger configured for Lambda
-  logger, 
+  logger,
 } from 'lambda-voie'
 
 const app = new Voie({
