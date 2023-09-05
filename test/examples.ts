@@ -229,7 +229,3 @@ export const UrlExample: UrlEvent = {
   },
   isBase64Encoded: false,
 }
-
-export function clone<T>(c: T): T {
-  return JSON.parse(JSON.stringify(c))
-}
