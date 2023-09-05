@@ -48,13 +48,13 @@ import {
 const app = new Voie({
   // You can pass in your own logger:
   // logger: console
-  defaultRoute: (event, context) => ({
-    statusCode: 500,
-    message: 'Route not found',
-    // Voie by default adds a route object to event for easy access: { method, path, params }
-    routeInfo: event.route
-  })
 })
+
+app.setDefaultRoute((event, context) => app.respone(400, {
+  message: 'Route not found',
+  // Voie by default adds a route object to event for easy access: { method, path, params }
+  routeInfo: event.route
+}))
 
 // You can also access the logger this way
 app.logger.info('hi')

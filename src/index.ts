@@ -20,6 +20,7 @@ class Router {
   routes: Record<string, Route> = {}
   eventRoutes: Record<string, Record<string, EventRoute>> = {}
 
+  // while constructor allows passing a defaultRoute, it's recommended to use setDefaultRoute instead to access class methods.
   constructor(options: { logger?: Logger; defaultRoute?: Route['handler'] } = {}) {
     const {
       logger: _logger = logger,
@@ -31,6 +32,16 @@ class Router {
       // @ts-expect-error defaultRoute not compatible
       defaultRoute,
     })
+  }
+
+  getDefaultRoute() {
+    // @ts-expect-error defaultRoute does not exist
+    return this.router.defaultRoute as Route['handler'] | undefined
+  }
+
+  setDefaultRoute(handler: Route['handler']): void {
+    // @ts-expect-error defaultRoute does not exist
+    this.router.defaultRoute = handler
   }
 
   eventRoute(eventSource: EventRoute['eventSource'], name: EventRoute['name']): EventRoute | undefined
@@ -200,7 +211,7 @@ class Router {
           throw err
 
         logger.error(err)
-        return { statusCode: 404, body: 'Route note found' }
+        return { statusCode: 404, body: { message: 'Route not found' } }
       }
     }
   }
