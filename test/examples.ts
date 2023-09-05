@@ -1,7 +1,6 @@
 import { Buffer } from 'node:buffer'
-import type { ALBEvent, APIGatewayProxyEvent, CloudFrontRequestEvent } from 'aws-lambda'
 
-export const ApiGatewayExample: APIGatewayProxyEvent = {
+export const ApiGatewayExample = {
   body: 'eyJ0ZXN0IjoiYm9keSJ9',
   resource: '/{proxy+}',
   path: '/v1/tiles/aerial/EPSG:3857/6/3/41.json',
@@ -92,7 +91,7 @@ export const ApiGatewayExample: APIGatewayProxyEvent = {
   },
 }
 
-export const CloudfrontExample: CloudFrontRequestEvent = {
+export const CloudfrontExample = {
   Records: [
     {
       cf: {
@@ -122,7 +121,7 @@ export const CloudfrontExample: CloudFrontRequestEvent = {
   ],
 }
 
-export const S3: S3TriggerEvent = {
+export const S3 = {
   Records: [
     {
       eventVersion: '2.0',
@@ -161,7 +160,7 @@ export const S3: S3TriggerEvent = {
   ],
 }
 
-export const AlbExample: ALBEvent = {
+export const AlbExample = {
   requestContext: {
     elb: {
       targetGroupArn:
@@ -193,7 +192,7 @@ export const AlbExample: ALBEvent = {
   isBase64Encoded: true,
 }
 
-export const UrlExample: UrlEvent = {
+export const UrlExample = {
   version: '2.0',
   routeKey: '$default',
   rawPath: '/v1/%F0%9F%A6%84/%F0%9F%8C%88/%F0%9F%A6%84.json',
