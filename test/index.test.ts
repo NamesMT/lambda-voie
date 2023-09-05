@@ -32,6 +32,10 @@ describe('Voie init', () => {
         ))).toBeTruthy()
       })
 
+      test('GET /compressed', () => {
+        expect(app.route('GET', '/compressed', event => app.response(200, 'Success', { compress: 1, event }))).toBeTruthy()
+      })
+
       test('GET /params', () => {
         expect(app.route('GET', '/params', event => (
           { statusCode: 200, body: 'Success', params: event.route.params }
@@ -84,6 +88,12 @@ describe('Voie init', () => {
       test('GET /health', () => {
         expect(handler(makeTestRouteEvent('GET', '/health'), {} as any)).resolves.toEqual(
           { statusCode: 200, body: 'Success' },
+        )
+      })
+
+      test('GET /compressed', () => {
+        expect(handler(makeTestRouteEvent('GET', '/compressed', { headers: { 'accept-encoding': 'br' } }), {} as any)).resolves.toContain(
+          { statusCode: 200, isBase64Encoded: true },
         )
       })
 

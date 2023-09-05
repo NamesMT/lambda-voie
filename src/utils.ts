@@ -9,14 +9,6 @@ export function tryIt(fn: () => any, fallbackValue?: any) {
   }
 }
 
-export function response(statusCode: number, message: string, data?: Record<any, any>) {
-  return {
-    statusCode,
-    message,
-    ...data,
-  }
-}
-
 export function stringToSet(string: string) {
   return new Set(
     string.split(',').map(str => str.trim()),

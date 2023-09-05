@@ -1,78 +1,21 @@
 import { brotliCompressSync, gzipSync, constants as zlibConstants } from 'node:zlib'
-import type { Context } from 'aws-lambda'
-import type { HTTPMethod, HTTPVersion, Handler, RouteOptions } from 'find-my-way'
 import FindMyWay from 'find-my-way'
-import type { Logger } from 'pino'
-import type { StatusCodes } from 'readable-http-codes'
 import { includeKeys } from 'filter-obj'
+import type { StatusCodes } from 'readable-http-codes'
+import type { Logger } from 'pino'
+import type { EventRoute, FMWRoute, LambdaEventRecord, LambdaHandler, LambdaHandlerContext, LambdaHandlerEvent, LambdaHandlerResponse, Route, RouteMiddlewareAfter, RouteMiddlewareBefore, RouterInstance } from './types'
+import { oGet, oPathEscape, oSet, stringToSet, tryIt } from './utils'
 import { logger } from './logger'
-import { oGet, oPathEscape, oSet, response, stringToSet, tryIt } from './utils'
 
-// TODO: cleaning up/reordering and put all types to types.ts and export them (after this is fixed: https://github.com/unjs/unbuild/issues/303)
-
-interface FMWRoute {
-  handler: Handler<HTTPVersion.V1>
-  method: HTTPMethod
-  path: string
-  pattern?: string
-  params: string[]
-  opts?: RouteOptions
-  store?: Record<any, any>
-}
-
-type LambdaHandler = (
-  event: LambdaHandlerEvent,
-  context: LambdaHandlerContext,
-) => void | Promise<LambdaHandlerResponse>
-
-type LambdaHandlerEvent = any
-type LambdaHandlerContext = Context
-// TODO: map to @types/aws-lambda.APIGatewayProxyResult (again, after unbuild#303 is fixed)
-type LambdaHandlerResponse = any
-
-interface LambdaEventRecord {
-  eventVersion: string
-  eventSource: string
-  awsRegion: string
-  eventTime: string
-  eventName: string
-  userIdentity: any | {
-    principalId: string
-  }
-  requestParameters: any | {
-    sourceIPAddress: string
-  }
-  responseElements: any
-  [key: string]: any
-}
-
-type RouteMiddlewareBefore<D> = (data: D, context: LambdaHandlerContext) => void
-type RouteMiddlewareAfter<D> = (data: D, context: LambdaHandlerContext, res: LambdaHandlerResponse) => void | any
-export interface Route extends Pick<FMWRoute, 'method' | 'path'> {
-  handler: (event: LambdaHandlerEvent, context: LambdaHandlerContext) => any
-  befores: RouteMiddlewareBefore<LambdaHandlerEvent>[]
-  afters: RouteMiddlewareAfter<LambdaHandlerEvent>[]
-
-  before(fn: RouteMiddlewareBefore<LambdaHandlerEvent>): this
-  after(fn: RouteMiddlewareAfter<LambdaHandlerEvent>): this
-}
-export interface EventRoute extends Omit<Route, 'handler' | 'method' | 'path' | 'before' | 'after' | 'befores' | 'afters'> {
-  eventSource: string
-  name: string
-
-  handler: (Record: LambdaEventRecord, context: LambdaHandlerContext) => any
-  befores: RouteMiddlewareBefore<LambdaEventRecord>[]
-  afters: RouteMiddlewareAfter<LambdaEventRecord>[]
-
-  before(fn: RouteMiddlewareBefore<LambdaEventRecord>): this
-  after(fn: RouteMiddlewareAfter<LambdaEventRecord>): this
-}
+export * from './types'
+export * as utils from './utils'
+export * from './logger'
 
 // TODO: maybe we should move base Router class to a new minimal not opinionated package?
 // TODO: consider patching and ship customized version of find-my-way instead of using too much type overriding.
 class Router {
   logger: Logger
-  router: ReturnType<typeof FindMyWay<HTTPVersion.V1>>
+  router: RouterInstance
 
   routes: Record<string, Route> = {}
   eventRoutes: Record<string, Record<string, EventRoute>> = {}
@@ -80,7 +23,7 @@ class Router {
   constructor(options: { logger?: Logger; defaultRoute?: Route['handler'] } = {}) {
     const {
       logger: _logger = logger,
-      defaultRoute = () => ({ statusCode: 500, message: 'defaultRoute' }),
+      defaultRoute = () => ({ statusCode: 500, body: 'defaultRoute' }),
     } = options
 
     this.logger = _logger
@@ -257,7 +200,7 @@ class Router {
           throw err
 
         logger.error(err)
-        return response(500, 'Error!', { error: err })
+        return { statusCode: 404, body: 'Route note found' }
       }
     }
   }
@@ -369,5 +312,3 @@ export class Voie extends Router {
     return responseObject
   }
 }
-
-export { logger }
