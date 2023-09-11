@@ -186,6 +186,12 @@ class Router {
   makeLambdaHandler(): LambdaHandler {
     return async (event: LambdaHandlerEvent, context: LambdaHandlerContext) => {
       try {
+        // Simple morphing for event: { cron:true, job:string }
+        if (event.cron === true && event.job) {
+          event.eventSource = `cron:${event.job}`
+          event.Records = [event]
+        }
+
         if (event.Records) {
           for (const Record of event.Records as LambdaEventRecord[]) {
             const eventRoutes = this.eventRoutes[Record.eventSource]
