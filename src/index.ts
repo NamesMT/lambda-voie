@@ -3,7 +3,7 @@ import FindMyWay from 'find-my-way'
 import { includeKeys } from 'filter-obj'
 import type { StatusCodes } from 'readable-http-codes'
 import type { Logger } from 'pino'
-import type { EventRoute, FMWRoute, LambdaEventRecord, LambdaHandler, LambdaHandlerContext, LambdaHandlerEvent, LambdaHandlerResponse, Route, RouteMiddlewareAfter, RouteMiddlewareBefore, RouterInstance } from './types'
+import type { EventRoute, FMWRoute, LambdaEventRecord, LambdaHandler, LambdaHandlerContext, LambdaHandlerEvent, LambdaHandlerResponse, Plugin, Route, RouteMiddlewareAfter, RouteMiddlewareBefore, RouterInstance } from './types'
 import { oGet, oPathEscape, oSet, stringToSet, tryIt } from './utils'
 import { logger } from './logger'
 
@@ -32,6 +32,12 @@ class Router {
       // @ts-expect-error defaultRoute not compatible
       defaultRoute,
     })
+  }
+
+  use(plugin: Plugin<this>, options: any = {}) {
+    plugin(this, options)
+
+    return this
   }
 
   getDefaultRoute() {

@@ -1,6 +1,6 @@
 /* eslint-disable unused-imports/no-unused-vars */
 import { describe, expect, test } from 'vitest'
-import type { Route } from '~/index'
+import type { Plugin, Route } from '~/index'
 import { Voie } from '~/index'
 
 function makeTestRouteEvent(method: Route['method'], path: Route['path'], spread?: Record<string, any>) {
@@ -23,6 +23,17 @@ describe('Voie init', () => {
   })
 
   const reInit = () => app = new Voie()
+
+  describe('registering plugins', () => {
+    test('plugin that register GET /pdummy route', () => {
+      const _plugin: Plugin<Voie> = (instance, options) => {
+        instance.route('GET', '/pdummy', () => app.response(200, 'Success'))
+      }
+
+      expect(app.use(_plugin)).toEqual(app) // Expect the plugin to run and return successfully
+      expect(app.route('GET', '/pdummy')).toContain({ method: 'GET', path: '/pdummy' }) // Expect the route to be defined
+    })
+  })
 
   describe('registering routes', () => {
     describe('normal routes', () => {
