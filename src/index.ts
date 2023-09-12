@@ -223,7 +223,7 @@ class Router {
           throw err
 
         logger.error(err)
-        return { statusCode: 404, body: { message: 'Route not found' } }
+        return { statusCode: 404, body: JSON.stringify({ message: 'Route not found' }) }
       }
     }
   }
