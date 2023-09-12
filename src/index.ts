@@ -24,7 +24,7 @@ class Router {
   constructor(options: { logger?: Logger; defaultRoute?: Route['handler'] } = {}) {
     const {
       logger: _logger = logger,
-      defaultRoute = () => ({ statusCode: 500, body: 'defaultRoute' }),
+      defaultRoute = () => ({ statusCode: 404, body: 'defaultRoute' }),
     } = options
 
     this.logger = _logger
@@ -217,13 +217,13 @@ class Router {
         const result = this.router.lookup({ method: event.requestContext.http.method, url: event.rawPath } as any, { event, context } as any) as ReturnType<Route['handler']>
         return await result
       }
-      catch (err) {
+      catch (err: any) {
         // eslint-disable-next-line turbo/no-undeclared-env-vars
         if (process.env.isLocal)
           throw err
 
         logger.error(err)
-        return { statusCode: 404, body: JSON.stringify({ message: 'Route not found' }) }
+        return { statusCode: 500, body: JSON.stringify({ message: err.message, code: err.code }) }
       }
     }
   }
