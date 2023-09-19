@@ -3,6 +3,8 @@ import { oGet } from './utils'
 import type { Plugin, Route } from './types'
 import type { Voie } from '.'
 
+// The cors plugin is just a simple wrapper for route('OPTIONS'),
+// But I write it full-fledge anyway as a plugin boilerplate for copy and code readability
 export interface CorsPluginOptions {
   /** @default "['*']" */
   routes?: Route['path'][]
