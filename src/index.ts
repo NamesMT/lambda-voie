@@ -162,14 +162,14 @@ class Router {
 
   _lookupTransform(fn: (lookupData: {
     method: string
-    url: string
+    path: string
     event: LambdaHandlerEvent
     context: LambdaHandlerContext
     params: { [k: string]: string | undefined }
     searchParams: { [k: string]: string }
   }) => any): FMWRoute['handler'] {
     return (req, res, params) => {
-      const { method, url } = req as { method: string; url: string }
+      const { method, url: path } = req as { method: string; url: string }
       const { event, context } = res as any as { event: LambdaHandlerEvent; context: LambdaHandlerContext }
       // We will use searchParams data from AWS's event object
       // Because the event.rawPath passed to find-my-way doesn't include searchParams
@@ -177,12 +177,12 @@ class Router {
       // https://github.com/delvedor/find-my-way/blob/ec25619ac06c16f9aabcab54995ce96f91390a62/index.js#L82
       const searchParams = event.queryStringParameters
 
-      return fn({ method, url, event, context, params, searchParams })
+      return fn({ method, path, event, context, params, searchParams })
     }
   }
 
   makeOnHandler(route: Route) {
-    return this._lookupTransform(({ method, url, event, context, params, searchParams }) => {
+    return this._lookupTransform(({ method, path, event, context, params, searchParams }) => {
       // // Constructing params
       const postBody = tryIt(() =>
         (typeof event.body === 'string')
@@ -209,7 +209,7 @@ class Router {
       }
       // //
 
-      event.route = { method, url, params: allParams, cookies }
+      event.route = { method, path, params: allParams, cookies }
 
       return this.routeHandler(route, event, context)
     })
