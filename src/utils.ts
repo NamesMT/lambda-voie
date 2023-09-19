@@ -1,5 +1,19 @@
 // TODO: make a personal utils repo with all the goodies
 
+import type { LambdaHandlerEvent, Route } from './types'
+
+export function fakeEvent(method: Route['method'], path: Route['path'], spread?: Record<string, any>) {
+  return {
+    rawPath: path,
+    requestContext: {
+      http: {
+        method,
+      },
+    },
+    ...spread,
+  } as any as LambdaHandlerEvent
+}
+
 export function tryIt(fn: () => any, fallbackValue?: any) {
   try {
     return fn()

@@ -1,19 +1,8 @@
 /* eslint-disable unused-imports/no-unused-vars */
 import { describe, expect, test } from 'vitest'
-import type { Plugin, Route } from '~/index'
+import type { Plugin } from '~/index'
 import { Voie } from '~/index'
-
-function makeTestRouteEvent(method: Route['method'], path: Route['path'], spread?: Record<string, any>) {
-  return {
-    rawPath: path,
-    requestContext: {
-      http: {
-        method,
-      },
-    },
-    ...spread,
-  }
-}
+import { fakeEvent } from '~/utils'
 
 describe('Voie init', () => {
   let app: Voie
@@ -97,37 +86,37 @@ describe('Voie init', () => {
 
     describe('normal routes', () => {
       test('GET /health', () => {
-        expect(handler(makeTestRouteEvent('GET', '/health'), {} as any)).resolves.toEqual(
+        expect(handler(fakeEvent('GET', '/health'), {} as any)).resolves.toEqual(
           { statusCode: 200, body: 'Success' },
         )
       })
 
       test('GET /compressed', () => {
-        expect(handler(makeTestRouteEvent('GET', '/compressed', { headers: { 'accept-encoding': 'br' } }), {} as any)).resolves.toContain(
+        expect(handler(fakeEvent('GET', '/compressed', { headers: { 'accept-encoding': 'br' } }), {} as any)).resolves.toContain(
           { statusCode: 200, isBase64Encoded: true },
         )
       })
 
       test('GET /params with searchParams', () => {
-        expect(handler(makeTestRouteEvent('GET', '/params', { queryStringParameters: { hola: 333 } }), {} as any)).resolves.toEqual(
+        expect(handler(fakeEvent('GET', '/params', { queryStringParameters: { hola: 333 } }), {} as any)).resolves.toEqual(
           { statusCode: 200, body: 'Success', params: { hola: 333 } },
         )
       })
 
       test('GET /params with postBody', () => {
-        expect(handler(makeTestRouteEvent('GET', '/params', { body: { hola: 444 } }), {} as any)).resolves.toEqual(
+        expect(handler(fakeEvent('GET', '/params', { body: { hola: 444 } }), {} as any)).resolves.toEqual(
           { statusCode: 200, body: 'Success', params: { hola: 444 } },
         )
       })
 
       test('GET /params/:parametric', () => {
-        expect(handler(makeTestRouteEvent('GET', '/params/working'), {} as any)).resolves.toEqual(
+        expect(handler(fakeEvent('GET', '/params/working'), {} as any)).resolves.toEqual(
           { statusCode: 200, body: 'Success', params: { parametric: 'working' } },
         )
       })
 
       test('GET /params/:parametric with searchParams and postBody', () => {
-        expect(handler(makeTestRouteEvent('GET', '/params/working', {
+        expect(handler(fakeEvent('GET', '/params/working', {
           queryStringParameters: { qs: true, hola: 333 },
           body: { pb: true, hola: 444, parametric: 'shouldBeOverridden' },
         }), {} as any)).resolves.toEqual(
@@ -136,17 +125,17 @@ describe('Voie init', () => {
       })
 
       test('GET /before-middleware', () => {
-        expect(handler(makeTestRouteEvent('GET', '/before-middleware'), {} as any)).resolves.toEqual(
+        expect(handler(fakeEvent('GET', '/before-middleware'), {} as any)).resolves.toEqual(
           { statusCode: 200, body: 'Success', itWorks: true },
         )
       })
 
       test('GET /after-middleware', () => {
-        expect(handler(makeTestRouteEvent('GET', '/after-middleware'), {} as any)).resolves.toEqual(false)
+        expect(handler(fakeEvent('GET', '/after-middleware'), {} as any)).resolves.toEqual(false)
       })
 
       test('GET /after-middleware2', () => {
-        expect(handler(makeTestRouteEvent('GET', '/after-middleware2'), {} as any)).resolves.toEqual(
+        expect(handler(fakeEvent('GET', '/after-middleware2'), {} as any)).resolves.toEqual(
           { statusCode: 200, body: 'Success', itWorks: 'abracadabra' },
         )
       })
