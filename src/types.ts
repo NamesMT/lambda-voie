@@ -18,7 +18,7 @@ export interface EventRoute {
 }
 
 export interface Route extends Pick<FMWRoute, 'method' | 'path'> {
-  handler: (event: LambdaHandlerEvent, context: LambdaHandlerContext) => any
+  handler: (event: LambdaHandlerEvent, context: LambdaHandlerContext) => LambdaHandlerResponse | any
   befores: RouteMiddlewareBefore<LambdaHandlerEvent>[]
   afters: RouteMiddlewareAfter<LambdaHandlerEvent>[]
 
