@@ -152,6 +152,12 @@ class Router {
     return this.makeLambdaHandler()
   }
 
+  _lookupShims(event: LambdaHandlerEvent, context: LambdaHandlerContext = {} as any) {
+    // Using 'as any' to suppress find-my-way req and res type-check errors, it's just sugar typing and doesn't really affect anything
+    // Also, correct-cast the return of lookup to Route['handler'] ReturnType
+    return this.router.lookup({ method: event.requestContext.http.method, url: event.rawPath } as any, { event, context } as any) as ReturnType<Route['handler']>
+  }
+
   _lookupTransform(fn: (lookupData: {
     method: string
     url: string
@@ -235,10 +241,7 @@ class Router {
         // Sets the current processing event to the class global
         this.$event = event
 
-        // Using 'as any' to suppress find-my-way req and res type-check errors, it's just sugar typing and doesn't really affect anything
-        // Also, correct-cast the return of lookup to Route['handler'] ReturnType
-        // Currently Cast to Promise for development purposes
-        const result = this.router.lookup({ method: event.requestContext.http.method, url: event.rawPath } as any, { event, context } as any) as ReturnType<Route['handler']>
+        const result = this._lookupShims(event, context)
 
         // Removes event from class global after finish processing
         this.$event = undefined
