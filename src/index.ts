@@ -14,6 +14,8 @@ export * from './logger'
 // TODO: maybe we should move base Router class to a new minimal not opinionated package?
 // TODO: consider patching and ship customized version of find-my-way instead of using too much type overriding.
 class Router {
+  $event?: LambdaHandlerEvent
+
   logger: Logger
   router: RouterInstance
 
@@ -208,6 +210,7 @@ class Router {
   makeLambdaHandler(): LambdaHandler {
     return async (event: LambdaHandlerEvent, context: LambdaHandlerContext) => {
       try {
+        // // eventRoute processor
         // Simple morphing for event: { cron:true, job:string }
         if (event.cron === true && event.job) {
           event.eventSource = `cron:${event.job}`
@@ -226,12 +229,22 @@ class Router {
 
           return true
         }
+        // //
+
+        // // route processor
+        // Sets the current processing event to the class global
+        this.$event = event
 
         // Using 'as any' to suppress find-my-way req and res type-check errors, it's just sugar typing and doesn't really affect anything
         // Also, correct-cast the return of lookup to Route['handler'] ReturnType
         // Currently Cast to Promise for development purposes
         const result = this.router.lookup({ method: event.requestContext.http.method, url: event.rawPath } as any, { event, context } as any) as ReturnType<Route['handler']>
+
+        // Removes event from class global after finish processing
+        this.$event = undefined
+
         return await result
+        // //
       }
       catch (err: any) {
         // eslint-disable-next-line turbo/no-undeclared-env-vars
@@ -263,7 +276,7 @@ export class Voie extends Router {
     this.logger.trace({ statusCode, body, options }, 'response()')
 
     const {
-      event,
+      event = this.$event,
       headers = {},
       cookies,
       autoAllow = true,
