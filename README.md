@@ -14,7 +14,9 @@ Nah, just a random word I came up for this package, haha.
     - **{** **method**, **route**, **params:** *postBody*+searchParams+[parametricRoute](https://github.com/delvedor/find-my-way#supported-path-formats), ***cookies*** **}**
       - *postBody*: event.body is automatically parsed and added to params if is object type
       - ***cookies***: event.cookies will be parsed to Record type if exists, can be undefined.
-  - **response(statusCode, body, options):** with support for `autoCors` and `compress` (you still need to define the OPTIONS route (WIP to remove this))
+  - **response(statusCode, body, options):** with support for `compress`
+  - **plugins**:
+    - **cors**: app.use(cors, { routes: ['/corsEnabledPath/*', 'someAPI'] })
 
 ## Usage
 
@@ -43,6 +45,7 @@ import { Voie } from 'lambda-voie'
 import {
   Voie,
   // Voie includes a pino-logger configured for Lambda
+  cors,
   logger,
 } from 'lambda-voie'
 
@@ -50,6 +53,13 @@ const app = new Voie({
   // You can pass in your own logger:
   // logger: console
 })
+
+// Using plugins:
+app.use(cors, {
+  // routes: ['*']
+})
+// Its actually just a simple wrapper for:
+// app.route('OPTIONS', '*')
 
 app.setDefaultRoute((event, context) => app.respone(400, {
   message: 'Route not found',
@@ -108,7 +118,7 @@ class MyVoie extends Voie {
 
 ## Roadmap
 
-- [ ] Refactor autoCors option
+- [x] Refactor autoCors option
   > (currently we have to both set the option and register the OPTIONS route)
 - [ ] Split the base router class to another repo?
 - [ ] Creates a template (boiler-plate) repo
