@@ -1,7 +1,7 @@
 /* eslint-disable unused-imports/no-unused-vars */
 import { describe, expect, test } from 'vitest'
 import type { Plugin } from '~/index'
-import { Voie } from '~/index'
+import { Voie, cors, logger } from '~/index'
 import { fakeEvent } from '~/utils'
 
 describe('Voie init', () => {
@@ -11,6 +11,8 @@ describe('Voie init', () => {
     expect(app = new Voie()).toBeTruthy()
   })
 
+  logger.level = 'warn'
+
   const reInit = () => app = new Voie()
 
   describe('registering plugins', () => {
@@ -19,8 +21,12 @@ describe('Voie init', () => {
         instance.route('GET', '/pdummy', () => app.response(200, 'Success'))
       }
 
-      expect(app.use(_plugin)).toEqual(app) // Expect the plugin to run and return successfully
+      expect(app.use(_plugin)).toEqual(app) // Expect the plugin to execute and return successfully
       expect(app.route('GET', '/pdummy')).toContain({ method: 'GET', path: '/pdummy' }) // Expect the route to be defined
+    })
+
+    test('plugin that enables cors', () => {
+      expect(app.use(cors)).toEqual(app)
     })
   })
 
@@ -91,9 +97,9 @@ describe('Voie init', () => {
         )
       })
 
-      test('GET /compressed', () => {
-        expect(handler(fakeEvent('GET', '/compressed', { headers: { 'accept-encoding': 'br' } }), {} as any)).resolves.toContain(
-          { statusCode: 200, isBase64Encoded: true },
+      test('GET /compressed and cors', () => {
+        expect(handler(fakeEvent('GET', '/compressed', { headers: { 'accept-encoding': 'br', 'origin': 'test' } }), {} as any)).resolves.toMatchObject(
+          { statusCode: 200, isBase64Encoded: true, headers: ({ 'Access-Control-Allow-Credentials': true, 'Access-Control-Allow-Origin': 'test' }) },
         )
       })
 
