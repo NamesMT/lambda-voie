@@ -173,6 +173,7 @@ class Router {
 
   makeOnHandler(route: Route) {
     return this._lookupTransform(({ method, url, event, context, params, searchParams }) => {
+      // // Constructing params
       const postBody = tryIt(() =>
         (typeof event.body === 'string')
           ? (event.body[0] === '{')
@@ -182,8 +183,23 @@ class Router {
       )
       // Based on first visibility overrides: ://api.call/:parametric(params)?searchParams - (POST body)
       const allParams = { ...postBody, ...searchParams, ...params }
+      // //
 
-      event.route = { method, url, params: allParams }
+      // // Constructing cookies
+      // From my testings, the v2 payload format is a simple array of "k=v" cookies,
+      // without any extra information like expires, secure, httpOnly,... etc.
+      // So we don't need a complex parser like "set-cookie-parser"
+      let cookies: Record<string, string> | undefined
+      if (event.cookies) {
+        cookies = {}
+        for (const cookie of event.cookies) {
+          const splits = cookie.split('=')
+          cookies[splits[0]] = splits[1]
+        }
+      }
+      // //
+
+      event.route = { method, url, params: allParams, cookies }
 
       return this.routeHandler(route, event, context)
     })
