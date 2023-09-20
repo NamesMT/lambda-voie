@@ -36,7 +36,7 @@ pnpm install lambda-voie
 ### Import:
 
 ```ts
-// ESM
+// This package exports as ESM only (index.mjs)
 import { Voie } from 'lambda-voie'
 ```
 
