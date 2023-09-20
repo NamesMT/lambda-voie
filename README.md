@@ -11,7 +11,7 @@ Nah, just a random word I came up for this package, haha.
 - **Clean syntax:** `app.route(method, path, handler)`, chainable to add middlewares easily: [Example](#deployed-indexmjs-example)
 - **Packed to relieve headache:**
   - **event.route:** easy access object that contains:
-    - **{** **method**, **route**, **params:** *postBody*+searchParams+[parametricRoute](https://github.com/delvedor/find-my-way#supported-path-formats), ***cookies*** **}**
+    - **{** **method**, **path**, **params:** *postBody*+searchParams+[parametricRoute](https://github.com/delvedor/find-my-way#supported-path-formats), ***cookies*** **}**
       - *postBody*: event.body is automatically parsed and added to params if is object type
       - ***cookies***: event.cookies will be parsed to Record type if exists, can be undefined.
   - **response(statusCode, body, options):** with support for `compress`
