@@ -44,8 +44,9 @@ import { Voie } from 'lambda-voie'
 ```ts
 import {
   Voie,
-  // Voie includes a pino-logger configured for Lambda
+  // Built-in cors plugin:
   cors,
+  // Lambda-configured pino-logger:
   logger,
 } from 'lambda-voie'
 
@@ -56,37 +57,51 @@ const app = new Voie({
 
 // Using plugins:
 app.use(cors, {
-  // routes: ['*']
+  // routes: ['*'] // defaults
 })
 // Its actually just a simple wrapper for:
 // app.route('OPTIONS', '*')
 
 app.setDefaultRoute((event, context) => app.respone(400, {
   message: 'Route not found',
-  // Voie by default adds a route object to event for easy access: { method, path, params }
+  // Voie by default adds a route object to event for easy access: { method, path, params, cookies }
   routeInfo: event.route
 }))
 
-// You can also access the logger this way
+// You can access the current instance's logger this way
 app.logger.info('hi')
 
 // Register the route (GET /test)
 app.route('GET', '/test', (event, context) =>
   ({
     statusCode: 200,
-    message: 'Success',
+    body: 'Success',
     before: event.addedByBefore,
-    willBeChangedByAfter: 'Yolo',
+    willBeAddedChangedByAfter: 4,
 
     alsoAddedByAnotherBefore: event.addedByBefore2,
   }),
 )
   .before((event, context) => { event.addedByBefore = 'Hi' })
-  .after((event, context, res) => { res.willBeChangedByAfter = 'So Ezzzz' })
+  // Note that in "after" middlewares, when using the app.response() function,
+  // The res body is already stringified/compressed.
+  .after((event, context, res) => { res.willBeChangedByAfter = res.willBeChangedByAfter * 4 })
 
 // You can get registered route by calling the same function (omit the handler):
 app.route('GET', '/test')
+  // Registering more middlewares:
   .before((event, context) => { event.addedByBefore2 = 'Hi' })
+  .after((event, context, res) => { res.addedByAfter = 'This wasnt defined'})
+
+// Expected response of GET /test:
+// {
+//   statusCode: 200,
+//   body: 'Success',
+//   before: 'Hi',
+//   willBeChangedByAfter: 160,
+//   alsoAddedByAnotherBefore: 'Hi',
+//   addedByAfter: 'This wasnt defined',
+// }
 
 // Voie also supports handling trigger events:
 app.eventRoute('aws:s3', 'log S3 PutObject', (Record, context) => {
