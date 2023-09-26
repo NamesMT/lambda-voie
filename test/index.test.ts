@@ -15,6 +15,19 @@ describe('Voie init', () => {
 
   const reInit = () => app = new Voie()
 
+  test('health check without plugins', () => {
+    expect(app.route('GET', '/health', () => app.response(200, 'halo'))).toBeTruthy()
+
+    let handler: ReturnType<Voie['handle']>
+    expect(handler = app.handle()).toBeTruthy()
+
+    expect(handler(fakeEvent('GET', '/health'), {} as any)).resolves.toMatchObject(
+      { statusCode: 200, body: JSON.stringify('halo') },
+    )
+
+    reInit()
+  })
+
   describe('registering plugins', () => {
     test('plugin that register GET /pdummy route', () => {
       const _plugin: Plugin<Voie> = (instance, options) => {
@@ -32,12 +45,6 @@ describe('Voie init', () => {
 
   describe('registering routes', () => {
     describe('normal routes', () => {
-      test('GET /health', () => {
-        expect(app.route('GET', '/health', () => (
-          { statusCode: 200, body: 'Success' }
-        ))).toBeTruthy()
-      })
-
       test('GET /compressed', () => {
         expect(app.route('GET', '/compressed', event => app.response(200, 'Success', { compress: 1, event }))).toBeTruthy()
       })
@@ -91,12 +98,6 @@ describe('Voie init', () => {
     })
 
     describe('normal routes', () => {
-      test('GET /health', () => {
-        expect(handler(fakeEvent('GET', '/health'), {} as any)).resolves.toEqual(
-          { statusCode: 200, body: 'Success' },
-        )
-      })
-
       test('OPTIONS /compressed', () => {
         expect(handler(fakeEvent('OPTIONS', '/compressed', { headers: { origin: 'test' } }), {} as any)).resolves.toMatchObject(
           { statusCode: 204, headers: ({ 'Access-Control-Allow-Credentials': true, 'Access-Control-Allow-Origin': 'test' }) },
