@@ -14,5 +14,5 @@ export const cors: Plugin<Voie> = (instance, options: CorsPluginOptions) => {
   const { routes } = defu(options, { routes: ['*'] })
 
   for (const route of routes)
-    instance.route('OPTIONS', route, () => true)
+    instance.route('OPTIONS', route, () => 'cors')
 }
