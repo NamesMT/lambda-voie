@@ -134,7 +134,13 @@ class Router {
     }
   }
 
-  async routeHandler(route: Route | EventRoute, data: LambdaHandlerEvent | LambdaEventRecord, context: LambdaHandlerContext) {
+  routeHandler(route: Route | EventRoute, data: LambdaHandlerEvent | LambdaEventRecord, context: LambdaHandlerContext) {
+    return (route.befores.length || route.afters.length)
+      ? this._routeHandler(route, data, context)
+      : route.handler(data, context)
+  }
+
+  async _routeHandler(route: Route | EventRoute, data: LambdaHandlerEvent | LambdaEventRecord, context: LambdaHandlerContext) {
     for (const middleware of route.befores)
       await middleware(data, context)
 
