@@ -291,7 +291,7 @@ export class Voie extends Router {
       headers = {},
       cookies,
       autoAllow = true,
-      autoCors = this._lookupShims(fakeEvent('OPTIONS', event.route.path)) === 'cors',
+      autoCors = this._lookupShims(fakeEvent('OPTIONS', event.route.path)).body === '"cors"',
       compress,
       contentType = 'application/json',
     } = options

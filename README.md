@@ -57,7 +57,7 @@ const app = new Voie({
 
 // Using plugins:
 app.use(cors, {
-  // routes: ['*'] // defaults
+  // paths: ['*'] // default enable for all paths
 })
 // Its actually just a simple wrapper for:
 // app.route('OPTIONS', '*')
@@ -135,7 +135,7 @@ class MyVoie extends Voie {
 
 - [x] Refactor autoCors option
   > (currently we have to both set the autoCors option and register the OPTIONS route with autoCors)  
-  > **Updated**: now we only needs to define the OPTIONS route with a return of 'cors', or use the included 'cors' plugin.
+  > **Updated**: use the included 'cors' plugin.
 - [ ] Split the base router class to another repo?
 - [ ] Creates a template (boiler-plate) repo
 - [ ] Includes some advanced examples

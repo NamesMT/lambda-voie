@@ -97,6 +97,12 @@ describe('Voie init', () => {
         )
       })
 
+      test('OPTIONS /compressed', () => {
+        expect(handler(fakeEvent('OPTIONS', '/compressed', { headers: { origin: 'test' } }), {} as any)).resolves.toMatchObject(
+          { statusCode: 204, headers: ({ 'Access-Control-Allow-Credentials': true, 'Access-Control-Allow-Origin': 'test' }) },
+        )
+      })
+
       test('GET /compressed and cors', () => {
         expect(handler(fakeEvent('GET', '/compressed', { headers: { 'accept-encoding': 'br', 'origin': 'test' } }), {} as any)).resolves.toMatchObject(
           { statusCode: 200, isBase64Encoded: true, headers: ({ 'Access-Control-Allow-Credentials': true, 'Access-Control-Allow-Origin': 'test' }) },
