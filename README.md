@@ -91,7 +91,7 @@ app.route('GET', '/test', (event, context) =>
 app.route('GET', '/test')
   // Registering more middlewares:
   .before((event, context) => { event.addedByBefore2 = 'Hi' })
-  .after((event, context, res) => { res.addedByAfter = 'This wasnt defined'})
+  .after((event, context, res) => { res.addedByAfter = 'This wasnt defined' })
 
 // Expected response of GET /test:
 // {
@@ -134,11 +134,13 @@ class MyVoie extends Voie {
 ## Roadmap
 
 - [x] Refactor autoCors option
-  > (currently we have to both set the option and register the OPTIONS route)
+  > (currently we have to both set the autoCors option and register the OPTIONS route with autoCors)  
+  > **Updated**: now we only needs to define the OPTIONS route with a return of 'cors', or use the included 'cors' plugin.
 - [ ] Split the base router class to another repo?
 - [ ] Creates a template (boiler-plate) repo
 - [ ] Includes some advanced examples
-- [ ] Make it easy to test routes locally
+- [x] Make it easy to test routes locally
+  > You could do: `app._lookupShims(fakeEvent(method, path, eventSpread))`
 - [ ] Find a way to supports?: [**response streaming**](https://aws.amazon.com/blogs/compute/introducing-aws-lambda-response-streaming/)
   - [Referrence Resource 1](https://github.com/astuyve/lambda-stream)
   - [Referrence Resource 2](https://advancedweb.hu/how-to-use-the-aws-lambda-streaming-response-type/)
