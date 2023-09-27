@@ -161,9 +161,15 @@ class Router {
   }
 
   _lookupShims(event: LambdaHandlerEvent, context: LambdaHandlerContext = {} as any) {
+    let method: string, url: string
+    if (event.rawPath)
+      [method, url] = [event.requestContext.http.method, event.rawPath]
+    else
+      [method, url] = event.routeKey.split(' ')
+
     // Using 'as any' to suppress find-my-way req and res type-check errors, it's just sugar typing and doesn't really affect anything
     // Also, correct-cast the return of lookup to Route['handler'] ReturnType
-    return this.router.lookup({ method: event.requestContext.http.method, url: event.rawPath } as any, { event, context } as any) as ReturnType<Route['handler']>
+    return this.router.lookup({ method, url } as any, { event, context } as any) as ReturnType<Route['handler']>
   }
 
   _lookupTransform(fn: (lookupData: {
