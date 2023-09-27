@@ -255,12 +255,12 @@ class Router {
         // Sets the current processing event to the class global
         this.$event = event
 
-        const result = this._lookupShims(event, context)
+        const result = await this._lookupShims(event, context)
 
         // Removes event from class global after finish processing
         this.$event = undefined
 
-        return await result
+        return result
         // //
       }
       catch (err: any) {
