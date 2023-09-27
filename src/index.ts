@@ -167,6 +167,11 @@ class Router {
     else
       [method, url] = event.routeKey.split(' ')
 
+    // We pass the rawQueryString from Lambda back to url for find-my-way to parse
+    // Because Lambda's included event.queryStringParameters prop doesn't parse array keys
+    if (event.rawQueryString)
+      url = [url, '?', event.rawQueryString].join('')
+
     // Using 'as any' to suppress find-my-way req and res type-check errors, it's just sugar typing and doesn't really affect anything
     // Also, correct-cast the return of lookup to Route['handler'] ReturnType
     return this.router.lookup({ method, url } as any, { event, context } as any) as ReturnType<Route['handler']>
@@ -180,14 +185,9 @@ class Router {
     params: { [k: string]: string | undefined }
     searchParams: { [k: string]: string }
   }) => any): FMWRoute['handler'] {
-    return (req, res, params) => {
+    return (req, res, params, _store, searchParams) => {
       const { method, url: path } = req as { method: string; url: string }
       const { event, context } = res as any as { event: LambdaHandlerEvent; context: LambdaHandlerContext }
-      // We will use searchParams data from AWS's event object
-      // Because the event.rawPath passed to find-my-way doesn't include searchParams
-      // We also doesn't need to disable the internal query parser because it's already optimized if empty:
-      // https://github.com/delvedor/find-my-way/blob/ec25619ac06c16f9aabcab54995ce96f91390a62/index.js#L82
-      const searchParams = event.queryStringParameters
 
       return fn({ method, path, event, context, params, searchParams })
     }
