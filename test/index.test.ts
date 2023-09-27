@@ -130,9 +130,9 @@ describe('Voie init', () => {
       })
 
       test('GET /params with searchParams', () => {
-        expect(handler(fakeEvent('GET', '/params', { queryStringParameters: { hola: 333 } }), {} as any))
+        expect(handler(fakeEvent('GET', '/params', { rawQueryString: 'hola=333' }), {} as any))
           .resolves.toEqual(
-            { statusCode: 200, body: 'Success', params: { hola: 333 } },
+            { statusCode: 200, body: 'Success', params: { hola: '333' } },
           )
       })
 
@@ -152,11 +152,11 @@ describe('Voie init', () => {
 
       test('GET /params/:parametric with searchParams and postBody', () => {
         expect(handler(fakeEvent('GET', '/params/working', {
-          queryStringParameters: { qs: true, hola: 333 },
+          rawQueryString: 'hola=333&qs',
           body: { pb: true, hola: 444, parametric: 'shouldBeOverridden' },
         }), {} as any))
           .resolves.toEqual(
-            { statusCode: 200, body: 'Success', params: { parametric: 'working', hola: 333, qs: true, pb: true } },
+            { statusCode: 200, body: 'Success', params: { parametric: 'working', hola: '333', qs: '', pb: true } },
           )
       })
 
