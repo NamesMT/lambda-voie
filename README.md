@@ -1,4 +1,13 @@
-# Lambda Voie [![NPM version](https://img.shields.io/npm/v/lambda-voie?color=a1b858&label=)](https://www.npmjs.com/package/lambda-voie)
+# Lambda Voie
+
+![TypeScript](https://img.shields.io/badge/TYPESCRIPT-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
+![AWS](https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazon-aws&logoColor=white)
+
+[![npm version][npm-version-src]][npm-version-href]
+[![npm downloads][npm-downloads-src]][npm-downloads-href]
+[![Codecov][codecov-src]][codecov-href]
+[![License][license-src]][license-href]
+
 
 **Voie** (French word for "way/path/lane/route", English for... "Very Opinionated Itinerary Editor"?)  
 Nah, just a random word I came up for this package, haha.  
@@ -149,3 +158,14 @@ class MyVoie extends Voie {
 ## License
 
 [MIT](./LICENSE) License © 2023 [NamesMT](https://github.com/NamesMT)
+
+<!-- Badges -->
+
+[npm-version-src]: https://img.shields.io/npm/v/lambda-voie?style=flat&colorA=18181B&colorB=F0DB4F
+[npm-version-href]: https://npmjs.com/package/lambda-voie
+[npm-downloads-src]: https://img.shields.io/npm/dm/lambda-voie?style=flat&colorA=18181B&colorB=F0DB4F
+[npm-downloads-href]: https://npmjs.com/package/lambda-voie
+[codecov-src]: https://img.shields.io/codecov/c/gh/namesmt/lambda-voie/main?style=flat&colorA=18181B&colorB=F0DB4F
+[codecov-href]: https://codecov.io/gh/namesmt/lambda-voie
+[license-src]: https://img.shields.io/github/license/namesmt/lambda-voie.svg?style=flat&colorA=18181B&colorB=F0DB4F
+[license-href]: https://github.com/namesmt/lambda-voie/blob/main/LICENSE
