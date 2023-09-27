@@ -52,7 +52,11 @@
     "start": "cross-env isLocal=true jiti src/index.ts | pino-pretty",
     "start-watch": "cross-env isLocal=true nodemon src/index.ts | pino-pretty",
     "test": "cross-env isLocal=true vitest --test-timeout=0",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs"
   },
   "dependencies": {
     "defu": "^6.1.2",
@@ -77,6 +81,7 @@
     "pnpm": "^8.7.6",
     "typescript": "^5.2.2",
     "unbuild": "^2.0.0",
+    "vitepress": "1.0.0-rc.20",
     "vitest": "^0.34.5"
   },
   "pnpm": {
