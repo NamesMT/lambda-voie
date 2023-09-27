@@ -1,8 +1,13 @@
-/* eslint-disable unused-imports/no-unused-vars */
+import { setTimeout } from 'node:timers/promises'
 import { describe, expect, test } from 'vitest'
 import type { Plugin } from '~/index'
 import { Voie, cors, logger } from '~/index'
 import { fakeEvent } from '~/utils'
+
+function _parseBody(res) {
+  res.body = JSON.parse(res.body)
+  return res
+}
 
 describe('Voie init', () => {
   let app: Voie
@@ -16,16 +21,32 @@ describe('Voie init', () => {
   const reInit = () => app = new Voie()
 
   test('health check without plugins', () => {
-    expect(app.route('GET', '/health', () => app.response(200, 'halo')))
+    expect(app.route('GET', '/health', event => app.response(200, { message: 'halo', routeInfo: event.route })))
       .toBeTruthy()
 
     let handler: ReturnType<Voie['handle']>
     expect(handler = app.handle())
       .toBeTruthy()
 
-    expect(handler(fakeEvent('GET', '/health'), {} as any))
+    expect(handler(fakeEvent('GET', '/health'), {} as any).then(_parseBody))
       .resolves.toMatchObject(
-        { statusCode: 200, body: JSON.stringify('halo') },
+        { statusCode: 200, body: { message: 'halo', routeInfo: { path: '/health' } } },
+      )
+
+    reInit()
+  })
+
+  test('health async check without plugins', async () => {
+    expect(app.route('GET', '/healthAsync', async (event) => { await setTimeout(50); return app.response(200, { message: 'halo', routeInfo: event.route }) }))
+      .toBeTruthy()
+
+    let handler: ReturnType<Voie['handle']>
+    expect(handler = app.handle())
+      .toBeTruthy()
+
+    await expect(handler(fakeEvent('GET', '/healthAsync'), {} as any).then(_parseBody))
+      .resolves.toMatchObject(
+        { statusCode: 200, body: { message: 'halo', routeInfo: { path: '/healthAsync' } } },
       )
 
     reInit()
