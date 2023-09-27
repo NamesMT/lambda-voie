@@ -1,6 +1,22 @@
 # Changelog
 
 
+## v0.1.4
+
+[compare changes](https://github.com/namesmt/lambda-voie/compare/v0.1.3...v0.1.4)
+
+### 🩹 Fixes
+
+- $event empty on async handlers ([b0e30b1](https://github.com/namesmt/lambda-voie/commit/b0e30b1))
+
+### ✅ Tests
+
+- Add healthAsync test ([c327dcf](https://github.com/namesmt/lambda-voie/commit/c327dcf))
+
+### ❤️ Contributors
+
+- NamesMT ([@NamesMT](http://github.com/NamesMT))
+
 ## v0.1.3
 
 [compare changes](https://github.com/namesmt/lambda-voie/compare/v0.1.2...v0.1.3)
