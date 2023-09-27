@@ -14,12 +14,15 @@
   },
   "bugs": "https://github.com/namesmt/lambda-voie/issues",
   "keywords": [
+    "api",
     "aws",
+    "engine",
+    "framework",
     "lambda",
-    "router",
-    "routing",
     "middleware",
-    "engine"
+    "plugin",
+    "router",
+    "routing"
   ],
   "sideEffects": false,
   "exports": {
