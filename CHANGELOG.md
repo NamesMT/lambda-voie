@@ -1,6 +1,26 @@
 # Changelog
 
 
+## v0.1.3
+
+[compare changes](https://github.com/namesmt/lambda-voie/compare/v0.1.2...v0.1.3)
+
+### 🚀 Enhancements
+
+- Fallback to routeKey if routePath doesn't exists Support for internal Lambda invoke() using routeKey ([5c83c16](https://github.com/namesmt/lambda-voie/commit/5c83c16))
+
+### 🩹 Fixes
+
+- Array queryStringParameters not parsed ([b381271](https://github.com/namesmt/lambda-voie/commit/b381271))
+
+### ✅ Tests
+
+- Fix tests ([7e6ed7e](https://github.com/namesmt/lambda-voie/commit/7e6ed7e))
+
+### ❤️ Contributors
+
+- NamesMT ([@NamesMT](http://github.com/NamesMT))
+
 ## v0.1.2
 
 [compare changes](https://github.com/namesmt/lambda-voie/compare/v0.1.1...v0.1.2)
