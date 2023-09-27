@@ -1,7 +1,7 @@
 import type { HTTPMethod, HTTPVersion, Handler, RouteOptions } from 'find-my-way'
 import type FindMyWay from 'find-my-way'
 
-export type Plugin<Instance> = (instance: Instance, options: any) => void
+export type Plugin<Instance, PluginOptions = any> = (instance: Instance, options: PluginOptions) => any
 
 export type RouterInstance = ReturnType<typeof FindMyWay<HTTPVersion.V1>>
 

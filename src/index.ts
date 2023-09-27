@@ -38,7 +38,7 @@ class Router {
     })
   }
 
-  use(plugin: Plugin<this>, options: any = {}) {
+  use<P extends Plugin<this, any>>(plugin: P, options: Parameters<P>[1] = {}) {
     plugin(this, options)
 
     return this
