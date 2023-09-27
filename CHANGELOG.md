@@ -1,6 +1,32 @@
 # Changelog
 
 
+## v0.1.1
+
+[compare changes](https://github.com/namesmt/lambda-voie/compare/v0.1.0...v0.1.1)
+
+### 🚀 Enhancements
+
+- Adds VitePress at ./docs ([b3e2597](https://github.com/namesmt/lambda-voie/commit/b3e2597))
+- Better types inherit for Plugin ([d768f71](https://github.com/namesmt/lambda-voie/commit/d768f71))
+
+### 📖 Documentation
+
+- Badges! ([bcfcdea](https://github.com/namesmt/lambda-voie/commit/bcfcdea))
+
+### 🏡 Chore
+
+- Remove `bumpp` package ([86b3e92](https://github.com/namesmt/lambda-voie/commit/86b3e92))
+
+### 🤖 CI
+
+- Test.yml ([eb5832a](https://github.com/namesmt/lambda-voie/commit/eb5832a))
+- Fix pnpm setup error, let @antfu/ni installs the manager ([b492b27](https://github.com/namesmt/lambda-voie/commit/b492b27))
+
+### ❤️ Contributors
+
+- NamesMT ([@NamesMT](http://github.com/NamesMT))
+
 ## v0.1.0
 
 [compare changes](https://github.com/namesmt/lambda-voie/compare/v0.0.16...v0.1.0)
