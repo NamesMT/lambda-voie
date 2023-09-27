@@ -1,6 +1,23 @@
 # Changelog
 
 
+## v0.1.2
+
+[compare changes](https://github.com/namesmt/lambda-voie/compare/v0.1.1...v0.1.2)
+
+### 🩹 Fixes
+
+- Pnpm bug duplicated main file packed, Reference: (http://pnpm/pnpm#6193) ([#6193](https://github.com/namesmt/lambda-voie/issues/6193))
+
+### 🏡 Chore
+
+- **package.json:** Remove typesVersions ([9efa703](https://github.com/namesmt/lambda-voie/commit/9efa703))
+- Update keywords ([c099859](https://github.com/namesmt/lambda-voie/commit/c099859))
+
+### ❤️ Contributors
+
+- NamesMT ([@NamesMT](http://github.com/NamesMT))
+
 ## v0.1.1
 
 [compare changes](https://github.com/namesmt/lambda-voie/compare/v0.1.0...v0.1.1)
