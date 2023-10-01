@@ -319,7 +319,7 @@ export class Voie extends Router {
 
         ...autoCors
           ? {
-              'Access-Control-Allow-Origin': event.headers.origin,
+              'Access-Control-Allow-Origin': event.headers.origin ?? event.headers.Origin ?? '*',
               'Access-Control-Allow-Credentials': true,
             }
           : undefined,
