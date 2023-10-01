@@ -1,6 +1,23 @@
 # Changelog
 
 
+## v0.1.5
+
+[compare changes](https://github.com/namesmt/lambda-voie/compare/v0.1.4...v0.1.5)
+
+### 🩹 Fixes
+
+- AutoCors error when origin not found ([048c1f3](https://github.com/namesmt/lambda-voie/commit/048c1f3))
+- AutoAllow shouldn't allow simple cors (Allow-Origin=*) ([7f9b69f](https://github.com/namesmt/lambda-voie/commit/7f9b69f))
+
+### ✅ Tests
+
+- Minor ([23a8907](https://github.com/namesmt/lambda-voie/commit/23a8907))
+
+### ❤️ Contributors
+
+- NamesMT ([@NamesMT](http://github.com/NamesMT))
+
 ## v0.1.4
 
 [compare changes](https://github.com/namesmt/lambda-voie/compare/v0.1.3...v0.1.4)
