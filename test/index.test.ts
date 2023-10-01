@@ -73,7 +73,7 @@ describe('Voie init', () => {
   describe('registering routes', () => {
     describe('normal routes', () => {
       test('GET /compressed', () => {
-        expect(app.route('GET', '/compressed', event => app.response(200, 'Success', { compress: 1, event })))
+        expect(app.route('GET', '/compressed', event => app.response(200, 'Success', { compress: 1 })))
           .toBeTruthy()
       })
 
