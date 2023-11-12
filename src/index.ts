@@ -318,7 +318,7 @@ export class Voie extends Router {
 
         ...autoCors
           ? {
-              'Access-Control-Allow-Origin': event.headers.origin ?? event.headers.Origin ?? '*',
+              'Access-Control-Allow-Origin': event.headers?.origin ?? event.headers?.Origin ?? '*',
               'Access-Control-Allow-Credentials': true,
             }
           : undefined,
@@ -348,7 +348,7 @@ export class Voie extends Router {
     // Note: Each character of JSON.stringify is UTF-16, which is most cases 2 bytes
     // Skips if compress is auto and body is less than 100kB
     if (compress && !(compress === 'auto' && responseObject.body.length < 50000)) {
-      const acceptableEncodings = event.headers['accept-encoding'] && stringToSet(event.headers['accept-encoding'])
+      const acceptableEncodings = event.headers?.['accept-encoding'] && stringToSet(event.headers?.['accept-encoding'])
       if (acceptableEncodings) {
         const compressLevel = compress === 'auto'
           ? responseObject.body.length < 1000000 // ~2MB
