@@ -1,6 +1,22 @@
 # Changelog
 
 
+## v0.1.6
+
+[compare changes](https://github.com/namesmt/lambda-voie/compare/v0.1.5...v0.1.6)
+
+### 🩹 Fixes
+
+- Optional chain for manual Lambda invoke cases ([2721f05](https://github.com/namesmt/lambda-voie/commit/2721f05))
+
+### 🏡 Chore
+
+- **.vscode:** Remove peacock customization ([808888b](https://github.com/namesmt/lambda-voie/commit/808888b))
+
+### ❤️ Contributors
+
+- NamesMT ([@NamesMT](http://github.com/NamesMT))
+
 ## v0.1.5
 
 [compare changes](https://github.com/namesmt/lambda-voie/compare/v0.1.4...v0.1.5)
