@@ -5,25 +5,5 @@
   "editor.formatOnSave": false,
   "prettier.enable": false,
   "vite.autoStart": false,
-  "npm.packageManager": "pnpm",
-  "workbench.colorCustomizations": {
-    "activityBar.activeBackground": "#95d117",
-    "activityBar.background": "#95d117",
-    "activityBar.foreground": "#15202b",
-    "activityBar.inactiveForeground": "#15202b99",
-    "activityBarBadge.background": "#137bac",
-    "activityBarBadge.foreground": "#e7e7e7",
-    "commandCenter.border": "#15202b99",
-    "sash.hoverBorder": "#95d117",
-    "statusBar.background": "#74a312",
-    "statusBar.foreground": "#15202b",
-    "statusBarItem.hoverBackground": "#53750d",
-    "statusBarItem.remoteBackground": "#74a312",
-    "statusBarItem.remoteForeground": "#15202b",
-    "titleBar.activeBackground": "#74a312",
-    "titleBar.activeForeground": "#15202b",
-    "titleBar.inactiveBackground": "#74a31299",
-    "titleBar.inactiveForeground": "#15202b99"
-  },
-  "peacock.color": "#74a312"
+  "npm.packageManager": "pnpm"
 }
