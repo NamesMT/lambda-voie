@@ -135,6 +135,20 @@ describe('Voie init', () => {
         .rejects.toThrow()
     })
 
+    describe('defaultRoute tests', () => {
+      test('normal', () => {
+        app.setDefaultRoute((event, context) => ({ event, context }))
+        expect(handler(fakeEvent('GET', '/testDR', { headers: { origin: 'test' } }), {} as any))
+          .resolves.toEqual(expect.objectContaining({ event: expect.any(Object) }))
+      })
+
+      test('passthrough', () => {
+        app.setDefaultRoute((event, context) => ({ event, context }), true)
+        expect(handler(fakeEvent('GET', '/testDR', { headers: { origin: 'test' } }), {} as any))
+          .resolves.toEqual(expect.objectContaining({ event: { method: 'GET', url: '/testDR' } }))
+      })
+    })
+
     describe('normal routes', () => {
       test('OPTIONS /compressed', () => {
         expect(handler(fakeEvent('OPTIONS', '/compressed', { headers: { origin: 'test' } }), {} as any))
