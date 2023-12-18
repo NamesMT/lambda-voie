@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v0.1.8
+
+[compare changes](https://github.com/namesmt/lambda-voie/compare/v0.1.7...v0.1.8)
+
+### 🩹 Fixes
+
+- PassThrough logic ([3f3e51d](https://github.com/namesmt/lambda-voie/commit/3f3e51d))
+
+### ❤️ Contributors
+
+- NamesMT ([@NamesMT](http://github.com/NamesMT))
+
 ## v0.1.7
 
 [compare changes](https://github.com/namesmt/lambda-voie/compare/v0.1.6...v0.1.7)
