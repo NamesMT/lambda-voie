@@ -49,9 +49,9 @@ class Router {
     return this.router.defaultRoute as Route['handler'] | undefined
   }
 
-  setDefaultRoute(handler: Route['handler']): void {
+  setDefaultRoute(handler: Route['handler'], passThrough = false): void {
     // @ts-expect-error defaultRoute does not exist
-    this.router.defaultRoute = this.makeOnHandler({ handler, befores: [], afters: [] })
+    this.router.defaultRoute = passThrough ? handler : this.makeOnHandler({ handler, befores: [], afters: [] })
   }
 
   eventRoute(eventSource: EventRoute['eventSource'], name: EventRoute['name']): EventRoute | undefined
