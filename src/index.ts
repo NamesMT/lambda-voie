@@ -244,10 +244,10 @@ class Router {
             if (eventRoutes) {
               for (const eventRoute of Object.values(eventRoutes))
                 await eventRoute.handler(Record, context)
+
+              return true
             }
           }
-
-          return true
         }
         // //
 
