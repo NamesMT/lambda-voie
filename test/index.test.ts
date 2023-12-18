@@ -144,8 +144,11 @@ describe('Voie init', () => {
 
       test('passthrough', () => {
         app.setDefaultRoute((event, context) => ({ event, context }), true)
-        expect(handler(fakeEvent('GET', '/testDR', { headers: { origin: 'test' } }), {} as any))
-          .resolves.toEqual(expect.objectContaining({ event: { method: 'GET', url: '/testDR' } }))
+        expect(handler(fakeEvent('GET', '/testDR', { headers: { origin: 'test' } }), { contextTest: 'halo' } as any))
+          .resolves.toEqual({
+            event: expect.objectContaining({ rawPath: '/testDR', requestContext: { http: { method: 'GET' } } }),
+            context: expect.objectContaining({ contextTest: 'halo' }),
+          })
       })
     })
 
