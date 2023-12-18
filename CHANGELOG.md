@@ -1,6 +1,31 @@
 # Changelog
 
 
+## v0.1.7
+
+[compare changes](https://github.com/namesmt/lambda-voie/compare/v0.1.6...v0.1.7)
+
+### 🚀 Enhancements
+
+- Introduce passThrough for setDefaultRoute ([b70e2a7](https://github.com/namesmt/lambda-voie/commit/b70e2a7))
+
+### 🩹 Fixes
+
+- Should only return if eventRoutes matched ([6c6b7d5](https://github.com/namesmt/lambda-voie/commit/6c6b7d5))
+- DefaultRoute not shimmed as expected ([c9b1865](https://github.com/namesmt/lambda-voie/commit/c9b1865))
+
+### 🏡 Chore
+
+- **.vscode:** Setting value name changed ([9032bfc](https://github.com/namesmt/lambda-voie/commit/9032bfc))
+
+### ✅ Tests
+
+- Add tests for defaultRoute ([2193323](https://github.com/namesmt/lambda-voie/commit/2193323))
+
+### ❤️ Contributors
+
+- NamesMT ([@NamesMT](http://github.com/NamesMT))
+
 ## v0.1.6
 
 [compare changes](https://github.com/namesmt/lambda-voie/compare/v0.1.5...v0.1.6)
