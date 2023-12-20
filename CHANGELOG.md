@@ -1,6 +1,31 @@
 # Changelog
 
 
+## v0.2.2
+
+[compare changes](https://github.com/namesmt/lambda-voie/compare/v0.2.1...v0.2.2)
+
+### 🚀 Enhancements
+
+- **allowEmptyRouteLookup:** Use empty string instead of 'N_LL' ([98c4277](https://github.com/namesmt/lambda-voie/commit/98c4277))
+- Use named `defu` export ([69b07d6](https://github.com/namesmt/lambda-voie/commit/69b07d6))
+
+### 📦 Build
+
+- Lock `pino` to 8.16.2 because of build error ([9c85360](https://github.com/namesmt/lambda-voie/commit/9c85360))
+
+### 🏡 Chore
+
+- Update deps ([e93166b](https://github.com/namesmt/lambda-voie/commit/e93166b))
+
+### ✅ Tests
+
+- Fix: use toMatchObject instead of toContain ([5be96ea](https://github.com/namesmt/lambda-voie/commit/5be96ea))
+
+### ❤️ Contributors
+
+- NamesMT ([@NamesMT](http://github.com/NamesMT))
+
 ## v0.2.1
 
 [compare changes](https://github.com/namesmt/lambda-voie/compare/v0.2.0...v0.2.1)
