@@ -167,7 +167,7 @@ class Router {
     else if (event.routeKey)
       [method, url] = event.routeKey.split(' ')
     else if (this.allowEmptyRouteLookup)
-      [method, url] = ['N_LL', 'N_LL']
+      [method, url] = ['', '']
     else
       throw new Error('Empty route lookup')
 
