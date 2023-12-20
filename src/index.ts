@@ -26,17 +26,14 @@ class Router {
 
   allowEmptyRouteLookup = false
 
-  // while constructor allows passing a defaultRoute, it's recommended to use setDefaultRoute instead to access class methods.
-  constructor(options: { logger?: Logger; defaultRoute?: Route['handler'] } = {}) {
+  constructor(options: { logger?: Logger } = {}) {
     const {
       logger: _logger = logger,
-      defaultRoute = () => ({ statusCode: 404, body: 'defaultRoute' }),
     } = options
 
     this.logger = _logger
     this.router = FindMyWay({
-      // @ts-expect-error defaultRoute not compatible
-      defaultRoute,
+      defaultRoute: () => ({ statusCode: 404, body: 'defaultRoute' }),
     })
   }
 
