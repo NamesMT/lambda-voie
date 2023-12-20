@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v0.2.1
+
+[compare changes](https://github.com/namesmt/lambda-voie/compare/v0.2.0...v0.2.1)
+
+### 🚀 Enhancements
+
+- Add simple morphing for top-level eventSource ([7d018db](https://github.com/namesmt/lambda-voie/commit/7d018db))
+
+### ❤️ Contributors
+
+- NamesMT ([@NamesMT](http://github.com/NamesMT))
+
 ## v0.2.0
 
 [compare changes](https://github.com/namesmt/lambda-voie/compare/v0.1.9...v0.2.0)
