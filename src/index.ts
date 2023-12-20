@@ -24,6 +24,8 @@ class Router {
   routes: Record<string, Route> = {}
   eventRoutes: Record<string, Record<string, EventRoute>> = {}
 
+  allowEmptyRouteLookup = false
+
   // while constructor allows passing a defaultRoute, it's recommended to use setDefaultRoute instead to access class methods.
   constructor(options: { logger?: Logger; defaultRoute?: Route['handler'] } = {}) {
     const {
@@ -164,8 +166,12 @@ class Router {
     let method: string, url: string
     if (event.rawPath)
       [method, url] = [event.requestContext.http.method, event.rawPath]
-    else
+    else if (event.routeKey)
       [method, url] = event.routeKey.split(' ')
+    else if (this.allowEmptyRouteLookup)
+      [method, url] = ['N_LL', 'N_LL']
+    else
+      throw new Error('Empty route lookup')
 
     // We pass the rawQueryString from Lambda back to url for find-my-way to parse
     // Because Lambda's included event.queryStringParameters prop doesn't parse array keys
