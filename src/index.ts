@@ -247,6 +247,10 @@ class Router {
           event.Records = [event]
         }
 
+        // Simple morphing for event: { eventSource:string }
+        if (event.eventSource)
+          event.Records = [event]
+
         if (event.Records) {
           for (const Record of event.Records as LambdaEventRecord[]) {
             const eventRoutes = this.eventRoutes[Record.eventSource]
