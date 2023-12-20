@@ -1,6 +1,23 @@
 # Changelog
 
 
+## v0.1.9
+
+[compare changes](https://github.com/namesmt/lambda-voie/compare/v0.1.8...v0.1.9)
+
+### 🚀 Enhancements
+
+- Introduce app.allowEmptyRouteLookup ([9ae26af](https://github.com/namesmt/lambda-voie/commit/9ae26af))
+- Auto set allowEmptyRouteLookup on defaultRoute with passThrough ([053c67f](https://github.com/namesmt/lambda-voie/commit/053c67f))
+
+### 📖 Documentation
+
+- Link issue number for allowEmptyRouteLookup ([a459496](https://github.com/namesmt/lambda-voie/commit/a459496))
+
+### ❤️ Contributors
+
+- NamesMT ([@NamesMT](http://github.com/NamesMT))
+
 ## v0.1.8
 
 [compare changes](https://github.com/namesmt/lambda-voie/compare/v0.1.7...v0.1.8)
