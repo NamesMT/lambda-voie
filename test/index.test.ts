@@ -61,7 +61,7 @@ describe('Voie init', () => {
       expect(app.use(_plugin))
         .toEqual(app) // Expect the plugin to execute and return successfully
       expect(app.route('GET', '/pdummy'))
-        .toContain({ method: 'GET', path: '/pdummy' }) // Expect the route to be defined
+        .toMatchObject({ method: 'GET', path: '/pdummy' }) // Expect the route to be defined
     })
 
     test('plugin that enables cors', () => {
