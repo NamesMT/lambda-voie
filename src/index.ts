@@ -3,6 +3,7 @@ import FindMyWay from 'find-my-way'
 import { includeKeys } from 'filter-obj'
 import type { StatusCodes } from 'readable-http-codes'
 import type { Logger } from 'pino'
+import { defu } from 'defu'
 import type { EventRoute, FMWRoute, LambdaEventRecord, LambdaHandler, LambdaHandlerContext, LambdaHandlerEvent, LambdaHandlerResponse, Plugin, Route, RouteMiddlewareAfter, RouteMiddlewareBefore, RouterInstance } from './types'
 import { fakeEvent, oGet, oPathEscape, oSet, stringToSet, tryIt } from './utils'
 import { logger } from './logger'
@@ -27,11 +28,9 @@ class Router {
   allowEmptyRouteLookup = false
 
   constructor(options: { logger?: Logger } = {}) {
-    const {
-      logger: _logger = logger,
-    } = options
+    const resolvedOptions = defu(options, { logger })
 
-    this.logger = _logger
+    this.logger = resolvedOptions.logger
     this.router = FindMyWay({
       defaultRoute: () => ({ statusCode: 404, body: 'defaultRoute' }),
     })

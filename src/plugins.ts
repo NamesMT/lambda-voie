@@ -1,4 +1,4 @@
-import defu from 'defu'
+import { defu } from 'defu'
 import { oGet } from './utils'
 import type { Plugin, Route } from './types'
 import type { Voie } from '.'
