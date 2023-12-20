@@ -1,6 +1,22 @@
 # Changelog
 
 
+## v0.2.0
+
+[compare changes](https://github.com/namesmt/lambda-voie/compare/v0.1.9...v0.2.0)
+
+### 💅 Refactors
+
+- ⚠️  Removed `options.defaultRoute` on constructor ([e38ebe1](https://github.com/namesmt/lambda-voie/commit/e38ebe1))
+
+#### ⚠️ Breaking Changes
+
+- ⚠️  Removed `options.defaultRoute` on constructor ([e38ebe1](https://github.com/namesmt/lambda-voie/commit/e38ebe1))
+
+### ❤️ Contributors
+
+- NamesMT ([@NamesMT](http://github.com/NamesMT))
+
 ## v0.1.9
 
 [compare changes](https://github.com/namesmt/lambda-voie/compare/v0.1.8...v0.1.9)
