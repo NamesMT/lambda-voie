@@ -1,6 +1,26 @@
 # Changelog
 
 
+## v0.4.0
+
+[compare changes](https://github.com/namesmt/lambda-voie/compare/v0.3.1...v0.4.0)
+
+### 💅 Refactors
+
+- ⚠️  Moved re-exports to subpath exports ([a1dd312](https://github.com/namesmt/lambda-voie/commit/a1dd312))
+
+### 📦 Build
+
+- Fix build error (Implicit inlined destr) ([4e43347](https://github.com/namesmt/lambda-voie/commit/4e43347))
+
+#### ⚠️ Breaking Changes
+
+- ⚠️  Moved re-exports to subpath exports ([a1dd312](https://github.com/namesmt/lambda-voie/commit/a1dd312))
+
+### ❤️ Contributors
+
+- NamesMT ([@NamesMT](http://github.com/NamesMT))
+
 ## v0.3.1
 
 [compare changes](https://github.com/namesmt/lambda-voie/compare/v0.3.0...v0.3.1)
