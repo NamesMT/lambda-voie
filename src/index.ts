@@ -240,12 +240,6 @@ class Router {
     return async (event: LambdaHandlerEvent, context: LambdaHandlerContext) => {
       try {
         // // eventRoute processor
-        // Simple morphing for event: { cron:true, job:string }
-        if (event.cron === true && event.job) {
-          event.eventSource = `cron:${event.job}`
-          event.Records = [event]
-        }
-
         // Simple morphing for event: { eventSource:string }
         if (event.eventSource)
           event.Records = [event]
