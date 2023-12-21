@@ -6,7 +6,6 @@ export default defineBuildConfig({
     'src/index',
     'src/plugins',
     'src/utils',
-    'src/types',
   ],
   declaration: 'node16',
   clean: true,

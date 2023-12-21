@@ -37,10 +37,6 @@
     "./utils": {
       "types": "./dist/utils.d.mts",
       "import": "./dist/utils.mjs"
-    },
-    "./types": {
-      "types": "./dist/types.d.mts",
-      "import": "./dist/types.mjs"
     }
   },
   "source": "./src/index.ts",

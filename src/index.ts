@@ -7,6 +7,8 @@ import type { EventRoute, FMWRoute, LambdaEventRecord, LambdaHandler, LambdaHand
 import { decodeBody, compress as doCompress, fakeEvent, oGet, oPathEscape, oSet, tryIt } from './utils'
 import { logger } from './logger'
 
+export * from './types'
+
 export * from './logger'
 
 // TODO: maybe we should move base Router class to a new minimal not opinionated package?
