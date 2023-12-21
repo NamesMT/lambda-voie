@@ -249,10 +249,12 @@ class Router {
             const eventRoutes = this.eventRoutes[Record.eventSource]
 
             if (eventRoutes) {
-              for (const eventRoute of Object.values(eventRoutes))
-                await eventRoute.handler(Record, context)
+              const res: Record<EventRoute['name'], any> = {}
 
-              return true
+              for (const eventRoute of Object.values(eventRoutes))
+                res[eventRoute.name] = await eventRoute.handler(Record, context)
+
+              return res
             }
           }
         }
