@@ -1,6 +1,22 @@
 # Changelog
 
 
+## v0.5.0
+
+[compare changes](https://github.com/namesmt/lambda-voie/compare/v0.4.0...v0.5.0)
+
+### 💅 Refactors
+
+- ⚠️  Re-exports ./types instead of subpath, as it requires additional explicit importing ([9d59970](https://github.com/namesmt/lambda-voie/commit/9d59970))
+
+#### ⚠️ Breaking Changes
+
+- ⚠️  Re-exports ./types instead of subpath, as it requires additional explicit importing ([9d59970](https://github.com/namesmt/lambda-voie/commit/9d59970))
+
+### ❤️ Contributors
+
+- NamesMT ([@NamesMT](http://github.com/NamesMT))
+
 ## v0.4.0
 
 [compare changes](https://github.com/namesmt/lambda-voie/compare/v0.3.1...v0.4.0)
