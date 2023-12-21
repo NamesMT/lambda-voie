@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v0.2.3
+
+[compare changes](https://github.com/namesmt/lambda-voie/compare/v0.2.2...v0.2.3)
+
+### 🚀 Enhancements
+
+- Update autoCors logic ([9891930](https://github.com/namesmt/lambda-voie/commit/9891930))
+
+### ❤️ Contributors
+
+- NamesMT ([@NamesMT](http://github.com/NamesMT))
+
 ## v0.2.2
 
 [compare changes](https://github.com/namesmt/lambda-voie/compare/v0.2.1...v0.2.2)
