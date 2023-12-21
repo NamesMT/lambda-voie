@@ -78,4 +78,10 @@ export interface LambdaHandlerContext {
 }
 
 // TODO: map to @types/aws-lambda.APIGatewayProxyResult (after unbuild#303 is fixed)
-export type LambdaHandlerResponse = any
+export interface LambdaHandlerResponse {
+  headers?: { [key: string]: any }
+  cookies?: string[]
+  statusCode?: number
+  body?: any
+  [key: string]: any
+}
