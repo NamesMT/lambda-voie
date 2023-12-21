@@ -134,7 +134,7 @@ export function decodeBody(body: any) {
 }
 
 /**
- * Helper to get the response's body, decompress and parse if needed
+ * Helper to decompress and parse the response's body if needed
  */
 export function decodeResponse(response: LambdaHandlerResponse) {
   const contentEncoding = response.headers?.['Content-Encoding']
