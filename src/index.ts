@@ -342,14 +342,14 @@ export class Voie extends Router {
     }
 
     if (cookies) {
-      if (!Array.isArray(cookies)) {
+      if (Array.isArray(cookies)) { responseObject.cookies = cookies }
+      else {
         const cookiesArr = []
         for (const key in cookies)
           cookiesArr.push(`${key}=${cookies[key]}`)
 
         responseObject.cookies = cookiesArr
       }
-      responseObject.cookies = cookies
     }
 
     // Note: Each character of JSON.stringify is UTF-16, which is most cases 2 bytes
