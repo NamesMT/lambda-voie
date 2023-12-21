@@ -2,7 +2,7 @@ import { setTimeout } from 'node:timers/promises'
 import { describe, expect, test } from 'vitest'
 import type { Plugin } from '~/index'
 import { Voie, cors, logger } from '~/index'
-import { fakeEvent } from '~/utils'
+import { decodeResponse, fakeEvent } from '~/utils'
 
 function _parseBody(res) {
   res.body = JSON.parse(res.body)
@@ -73,7 +73,7 @@ describe('Voie init', () => {
   describe('registering routes', () => {
     describe('normal routes', () => {
       test('GET /compressed', () => {
-        expect(app.route('GET', '/compressed', event => app.response(200, 'Success', { compress: 1 })))
+        expect(app.route('GET', '/compressed', event => app.response(200, { message: 'Success', luckyNumber: 69 }, { compress: 1 })))
           .toBeTruthy()
       })
 
@@ -164,6 +164,13 @@ describe('Voie init', () => {
         expect(handler(fakeEvent('GET', '/compressed', { headers: { 'accept-encoding': 'br', 'origin': 'test' } }), {} as any))
           .resolves.toMatchObject(
             { statusCode: 200, isBase64Encoded: true, headers: ({ 'Access-Control-Allow-Credentials': true, 'Access-Control-Allow-Origin': 'test' }) },
+          )
+      })
+
+      test('GET /compressed, decodeResponse', () => {
+        expect(handler(fakeEvent('GET', '/compressed', { headers: { 'accept-encoding': 'br' } }), {} as any).then(decodeResponse))
+          .resolves.toMatchObject(
+            { body: { message: 'Success', luckyNumber: 69 } },
           )
       })
 
