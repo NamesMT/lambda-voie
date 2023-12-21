@@ -1,11 +1,10 @@
-import { brotliCompressSync, gzipSync, constants as zlibConstants } from 'node:zlib'
 import FindMyWay from 'find-my-way'
 import { includeKeys } from 'filter-obj'
 import type { StatusCodes } from 'readable-http-codes'
 import type { Logger } from 'pino'
 import { defu } from 'defu'
 import type { EventRoute, FMWRoute, LambdaEventRecord, LambdaHandler, LambdaHandlerContext, LambdaHandlerEvent, LambdaHandlerResponse, Plugin, Route, RouteMiddlewareAfter, RouteMiddlewareBefore, RouterInstance } from './types'
-import { fakeEvent, oGet, oPathEscape, oSet, stringToSet, tryIt } from './utils'
+import { decodeBody, compress as doCompress, fakeEvent, oGet, oPathEscape, oSet, tryIt } from './utils'
 import { logger } from './logger'
 
 export * from './types'
@@ -205,13 +204,7 @@ class Router {
   makeOnHandler(route: Route) {
     return this._lookupTransform(({ method, path, event, context, params, searchParams }) => {
       // // Constructing params
-      const postBody = tryIt(() =>
-        (typeof event.body === 'string')
-          ? (event.body[0] === '{')
-              ? JSON.parse(event.body)
-              : { string_body: event.body }
-          : (typeof event.body === 'object' ? event.body : undefined),
-      )
+      const postBody = decodeBody(event.body)
       // Based on first visibility overrides: ://api.call/:parametric(params)?searchParams - (POST body)
       const allParams = { ...postBody, ...searchParams, ...params }
       // //
@@ -362,28 +355,17 @@ export class Voie extends Router {
     // Note: Each character of JSON.stringify is UTF-16, which is most cases 2 bytes
     // Skips if compress is auto and body is less than 100kB
     if (compress && !(compress === 'auto' && responseObject.body.length < 50000)) {
-      const acceptableEncodings = event.headers?.['accept-encoding'] && stringToSet(event.headers?.['accept-encoding'])
-      if (acceptableEncodings) {
-        const compressLevel = compress === 'auto'
-          ? responseObject.body.length < 1000000 // ~2MB
-            ? 6
-            : 1
-          : compress
-
-        if (acceptableEncodings.has('br') || acceptableEncodings.has('*')) {
-          responseObject.body = brotliCompressSync(responseObject.body, { params: { [zlibConstants.BROTLI_PARAM_QUALITY]: compressLevel } })
-          responseObject.headers['Content-Encoding'] = 'br'
-        }
-        else if (acceptableEncodings.has('gzip')) {
-          responseObject.body = gzipSync(responseObject.body, { level: compressLevel })
-          responseObject.headers['Content-Encoding'] = 'gzip'
-        }
-
-        if (responseObject.headers['Content-Encoding']) {
-          responseObject.body = responseObject.body.toString('base64')
-          responseObject.isBase64Encoded = true
-        }
-      }
+      tryIt(() => {
+        doCompress(responseObject.body, {
+          response: responseObject,
+          acceptEncoding: event.headers?.['accept-encoding'] ?? '',
+          level: compress === 'auto'
+            ? responseObject.body.length < 1000000 // ~2MB
+              ? 6
+              : 1
+            : compress,
+        })
+      })
     }
 
     this.logger.info({
