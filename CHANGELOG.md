@@ -1,6 +1,22 @@
 # Changelog
 
 
+## v0.3.1
+
+[compare changes](https://github.com/namesmt/lambda-voie/compare/v0.3.0...v0.3.1)
+
+### 💅 Refactors
+
+- Refactor compress and decodeBody logic to utils ([627fc83](https://github.com/namesmt/lambda-voie/commit/627fc83))
+
+### ✅ Tests
+
+- Add test for decodeResponse ([32a1fe9](https://github.com/namesmt/lambda-voie/commit/32a1fe9))
+
+### ❤️ Contributors
+
+- NamesMT ([@NamesMT](http://github.com/NamesMT))
+
 ## v0.3.0
 
 [compare changes](https://github.com/namesmt/lambda-voie/compare/v0.2.3...v0.3.0)
