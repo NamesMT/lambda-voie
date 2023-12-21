@@ -29,8 +29,21 @@
     ".": {
       "types": "./dist/index.d.mts",
       "import": "./dist/index.mjs"
+    },
+    "./plugins": {
+      "types": "./dist/plugins.d.mts",
+      "import": "./dist/plugins.mjs"
+    },
+    "./utils": {
+      "types": "./dist/utils.d.mts",
+      "import": "./dist/utils.mjs"
+    },
+    "./types": {
+      "types": "./dist/types.d.mts",
+      "import": "./dist/types.mjs"
     }
   },
+  "source": "./src/index.ts",
   "main": "dist/index.mjs",
   "module": "dist/index.mjs",
   "types": "dist/index.d.mts",
