@@ -1,6 +1,26 @@
 # Changelog
 
 
+## v0.3.0
+
+[compare changes](https://github.com/namesmt/lambda-voie/compare/v0.2.3...v0.3.0)
+
+### 🚀 Enhancements
+
+- Allow returning result from eventRoute ([e451f3b](https://github.com/namesmt/lambda-voie/commit/e451f3b))
+
+### 💅 Refactors
+
+- ⚠️  Remove morphing for `cron: true` events (desc) ([291742b](https://github.com/namesmt/lambda-voie/commit/291742b))
+
+#### ⚠️ Breaking Changes
+
+- ⚠️  Remove morphing for `cron: true` events (desc) ([291742b](https://github.com/namesmt/lambda-voie/commit/291742b))
+
+### ❤️ Contributors
+
+- NamesMT ([@NamesMT](http://github.com/NamesMT))
+
 ## v0.2.3
 
 [compare changes](https://github.com/namesmt/lambda-voie/compare/v0.2.2...v0.2.3)
