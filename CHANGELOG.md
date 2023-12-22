@@ -1,6 +1,46 @@
 # Changelog
 
 
+## v0.10.0
+
+[compare changes](https://github.com/namesmt/lambda-voie/compare/v0.3.1...v0.10.0)
+
+### 🚀 Enhancements
+
+- Default register `pino-lambda`'s `lambdaRequestTracker()` ([e4aac74](https://github.com/namesmt/lambda-voie/commit/e4aac74))
+- Allow configuring `withRequest` ([3a9e85a](https://github.com/namesmt/lambda-voie/commit/3a9e85a))
+
+### 🩹 Fixes
+
+- **reponse:** Cookies processing ([c72aae5](https://github.com/namesmt/lambda-voie/commit/c72aae5))
+- **compress:** Headers might be undefined ([6ac37ba](https://github.com/namesmt/lambda-voie/commit/6ac37ba))
+
+### 💅 Refactors
+
+- Re-base repo with namesmt/starter-ts (desc) ([33a80fe](https://github.com/namesmt/lambda-voie/commit/33a80fe))
+- ⚠️  Exports changes, direct exports `utils`, subpath export `plugins` ([df86709](https://github.com/namesmt/lambda-voie/commit/df86709))
+
+### 📖 Documentation
+
+- Fix wrong doc of function ([50a1996](https://github.com/namesmt/lambda-voie/commit/50a1996))
+
+### 📦 Build
+
+- Fix build error (Implicit inlined destr) ([4e43347](https://github.com/namesmt/lambda-voie/commit/4e43347))
+
+### 🌊 Types
+
+- Type basic interface for `LambdaHandlerResponse` ([7e0a871](https://github.com/namesmt/lambda-voie/commit/7e0a871))
+- Type fixes ([3ae6b3b](https://github.com/namesmt/lambda-voie/commit/3ae6b3b))
+
+#### ⚠️ Breaking Changes
+
+- ⚠️  Exports changes, direct exports `utils`, subpath export `plugins` ([df86709](https://github.com/namesmt/lambda-voie/commit/df86709))
+
+### ❤️ Contributors
+
+- NamesMT ([@NamesMT](http://github.com/NamesMT))
+
 ## v0.3.1
 
 [compare changes](https://github.com/namesmt/lambda-voie/compare/v0.3.0...v0.3.1)
