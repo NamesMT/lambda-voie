@@ -3,9 +3,9 @@
   "compilerOptions": {
     "target": "ESNext",
     "lib": ["ESNext"],
-    "module": "ESNext",
-    "moduleResolution": "node",
     "baseUrl": ".",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
     "paths": {
       "~/*": [
         "src/*"
@@ -14,15 +14,15 @@
     "types": [
       "vitest"
     ],
-    "declaration": true,
-    "declarationMap": true,
-    "inlineSources": false,
-    "isolatedModules": true,
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
     "strict": true,
     "noUnusedLocals": false,
     "noUnusedParameters": false,
+    "declaration": true,
+    "declarationMap": true,
+    "inlineSources": false,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
     "preserveWatchOutput": true,
     "skipLibCheck": true
   },
