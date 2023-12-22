@@ -8,9 +8,8 @@ import { decodeBody, compress as doCompress, fakeEvent, oGet, oPathEscape, oSet,
 import { logger } from './logger'
 
 export * from './types'
-export * as utils from './utils'
+export * from './utils'
 export * from './logger'
-export * from './plugins'
 
 // TODO: maybe we should move base Router class to a new minimal not opinionated package?
 // TODO: consider patching and ship customized version of find-my-way instead of using too much type overriding.
