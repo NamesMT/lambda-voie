@@ -1,11 +1,11 @@
-/* eslint-disable turbo/no-undeclared-env-vars */
-import pino from 'pino'
-import { pinoLambdaDestination } from 'pino-lambda'
+import { isDevelopment } from 'std-env'
+import { pino } from 'pino'
+import { lambdaRequestTracker, pinoLambdaDestination } from 'pino-lambda'
 
 const destination = pinoLambdaDestination()
 export const logger = pino(
   {
-    level: process.env.isLocal ? 'debug' : 'info',
+    level: isDevelopment ? 'debug' : 'info',
     base: undefined,
   // redact: {
   //   paths: [],
@@ -13,5 +13,6 @@ export const logger = pino(
   // },
   },
   // @ts-expect-error undefined DestinationStream
-  process.env.isLocal ? undefined : destination,
+  isDevelopment ? undefined : destination,
 )
+export const withRequest = lambdaRequestTracker()

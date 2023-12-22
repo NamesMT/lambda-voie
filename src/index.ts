@@ -3,9 +3,10 @@ import { includeKeys } from 'filter-obj'
 import type { StatusCodes } from 'readable-http-codes'
 import type { Logger } from 'pino'
 import { defu } from 'defu'
+import { isDevelopment } from 'std-env'
 import type { EventRoute, FMWRoute, LambdaEventRecord, LambdaHandler, LambdaHandlerContext, LambdaHandlerEvent, LambdaHandlerResponse, Plugin, Route, RouteMiddlewareAfter, RouteMiddlewareBefore, RouterInstance } from './types'
 import { decodeBody, compress as doCompress, fakeEvent, oGet, oPathEscape, oSet, tryIt } from './utils'
-import { logger } from './logger'
+import { logger, withRequest } from './logger'
 
 export * from './types'
 export * from './utils'
@@ -187,8 +188,8 @@ class Router {
     searchParams: { [k: string]: string }
   }) => any): FMWRoute['handler'] {
     return (req, res, params, _store, searchParams) => {
-      const { method, url: path } = req as { method: string; url: string }
-      const { event, context } = res as any as { event: LambdaHandlerEvent; context: LambdaHandlerContext }
+      const { method, url: path } = req as { method: string, url: string }
+      const { event, context } = res as any as { event: LambdaHandlerEvent, context: LambdaHandlerContext }
 
       return fn({ method, path, event, context, params, searchParams })
     }
@@ -230,6 +231,8 @@ class Router {
 
   makeLambdaHandler(): LambdaHandler {
     return async (event: LambdaHandlerEvent, context: LambdaHandlerContext) => {
+      withRequest(event, context)
+
       try {
         // // eventRoute processor
         // Simple morphing for event: { eventSource:string }
@@ -265,8 +268,7 @@ class Router {
         // //
       }
       catch (err: any) {
-        // eslint-disable-next-line turbo/no-undeclared-env-vars
-        if (process.env.isLocal)
+        if (isDevelopment)
           throw err
 
         logger.error(err)
