@@ -68,7 +68,7 @@ export function oSet(obj: any, path: string | string[], value: any, create = tru
 /**
  * Compress inputted data, `response` could be passed in to mutate it.
  */
-export function compress(data: any, options: { response?: LambdaHandlerResponse; acceptEncoding?: string; level?: number } = {}) {
+export function compress(data: any, options: { response?: LambdaHandlerResponse, acceptEncoding?: string, level?: number } = {}) {
   const {
     acceptEncoding,
     level,
@@ -77,7 +77,7 @@ export function compress(data: any, options: { response?: LambdaHandlerResponse;
 
   const inputData = () => Buffer.isBuffer(data) || typeof data === 'string' ? data : JSON.stringify(data)
 
-  let result: { encoding: string; data: Buffer } | undefined
+  let result: { encoding: string, data: Buffer } | undefined
 
   if (acceptEncoding.includes('*') || acceptEncoding.includes('br')) {
     result = {
@@ -95,7 +95,7 @@ export function compress(data: any, options: { response?: LambdaHandlerResponse;
 
   if (result) {
     if (response) {
-      response.headers['Content-Encoding'] = result.encoding
+      oSet(response, 'headers.Content-Encoding', result.encoding)
       response.body = result.data.toString('base64')
       response.isBase64Encoded = true
     }
