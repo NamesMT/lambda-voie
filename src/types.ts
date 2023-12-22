@@ -1,5 +1,7 @@
 import type { HTTPMethod, HTTPVersion, Handler, RouteOptions } from 'find-my-way'
 import type FindMyWay from 'find-my-way'
+import type { Logger } from 'pino'
+import type { LambdaRequestTrackerOptions } from 'pino-lambda'
 
 export type Plugin<Instance, PluginOptions = any> = (instance: Instance, options: PluginOptions) => any
 
@@ -84,4 +86,16 @@ export interface LambdaHandlerResponse {
   statusCode?: number
   body?: any
   [key: string]: any
+}
+
+export interface RouterConstructOptions {
+  /**
+   * Pass in your custom logger if needed.
+   */
+  logger?: Logger
+
+  /**
+   * Options for `pino-lambda`'s withRequest(), could be disabled with falsy values.
+   */
+  withRequestOptions?: LambdaRequestTrackerOptions
 }

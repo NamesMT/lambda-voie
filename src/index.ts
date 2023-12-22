@@ -4,9 +4,10 @@ import type { StatusCodes } from 'readable-http-codes'
 import type { Logger } from 'pino'
 import { defu } from 'defu'
 import { isDevelopment } from 'std-env'
-import type { EventRoute, FMWRoute, LambdaEventRecord, LambdaHandler, LambdaHandlerContext, LambdaHandlerEvent, LambdaHandlerResponse, Plugin, Route, RouteMiddlewareAfter, RouteMiddlewareBefore, RouterInstance } from './types'
+import { lambdaRequestTracker } from 'pino-lambda'
+import type { EventRoute, FMWRoute, LambdaEventRecord, LambdaHandler, LambdaHandlerContext, LambdaHandlerEvent, LambdaHandlerResponse, Plugin, Route, RouteMiddlewareAfter, RouteMiddlewareBefore, RouterConstructOptions, RouterInstance } from './types'
 import { decodeBody, compress as doCompress, fakeEvent, oGet, oPathEscape, oSet, tryIt } from './utils'
-import { logger, withRequest } from './logger'
+import { logger } from './logger'
 
 export * from './types'
 export * from './utils'
@@ -19,6 +20,8 @@ class Router {
   $event?: LambdaHandlerEvent
 
   logger: Logger
+  withRequest?: ReturnType<typeof lambdaRequestTracker>
+
   router: RouterInstance
 
   routes: Record<string, Route> = {}
@@ -26,10 +29,11 @@ class Router {
 
   allowEmptyRouteLookup = false
 
-  constructor(options: { logger?: Logger } = {}) {
-    const resolvedOptions = defu(options, { logger })
+  constructor(options: RouterConstructOptions = {}) {
+    const resolvedOptions = defu(options, { logger, withRequestOptions: {} })
 
     this.logger = resolvedOptions.logger
+    this.withRequest = resolvedOptions.withRequestOptions && lambdaRequestTracker(resolvedOptions.withRequestOptions)
     this.router = FindMyWay({
       defaultRoute: () => ({ statusCode: 404, body: 'defaultRoute' }),
     })
@@ -231,7 +235,8 @@ class Router {
 
   makeLambdaHandler(): LambdaHandler {
     return async (event: LambdaHandlerEvent, context: LambdaHandlerContext) => {
-      withRequest(event, context)
+      if (this.withRequest)
+        this.withRequest(event, context)
 
       try {
         // // eventRoute processor

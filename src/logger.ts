@@ -1,6 +1,6 @@
 import { isDevelopment } from 'std-env'
 import { pino } from 'pino'
-import { lambdaRequestTracker, pinoLambdaDestination } from 'pino-lambda'
+import { pinoLambdaDestination } from 'pino-lambda'
 
 const destination = pinoLambdaDestination()
 export const logger = pino(
@@ -15,4 +15,3 @@ export const logger = pino(
   // @ts-expect-error undefined DestinationStream
   isDevelopment ? undefined : destination,
 )
-export const withRequest = lambdaRequestTracker()
