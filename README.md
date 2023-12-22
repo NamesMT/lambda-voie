@@ -8,7 +8,6 @@
 [![Codecov][codecov-src]][codecov-href]
 [![License][license-src]][license-href]
 
-
 **Voie** (French word for "way/path/lane/route", English for... "Very Opinionated Itinerary Editor"?)  
 Nah, just a random word I came up for this package, haha.  
 
@@ -81,16 +80,14 @@ app.setDefaultRoute((event, context) => app.respone(400, {
 app.logger.info('hi')
 
 // Register the route (GET /test)
-app.route('GET', '/test', (event, context) =>
-  ({
-    statusCode: 200,
-    body: 'Success',
-    before: event.addedByBefore,
-    willBeAddedChangedByAfter: 4,
+app.route('GET', '/test', (event, context) => ({
+  statusCode: 200,
+  body: 'Success',
+  before: event.addedByBefore,
+  willBeAddedChangedByAfter: 4,
 
-    alsoAddedByAnotherBefore: event.addedByBefore2,
-  }),
-)
+  alsoAddedByAnotherBefore: event.addedByBefore2,
+}))
   .before((event, context) => { event.addedByBefore = 'Hi' })
   // Note that in "after" middlewares, when using the app.response() function,
   // The res body is already stringified/compressed.

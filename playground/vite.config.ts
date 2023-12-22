@@ -1,9 +1,13 @@
 import { defineConfig } from 'vite'
 import Inspect from 'vite-plugin-inspect'
-import * as rootPackage from 'lambda-voie'
 
-// eslint-disable-next-line no-console
-console.log({ rootPackage: JSON.stringify(rootPackage) })
+import { Voie } from 'lambda-voie'
+import { cors } from 'lambda-voie/plugins'
+
+const app = new Voie()
+app.use(cors)
+
+export const handler = app.handle()
 
 export default defineConfig({
   plugins: [

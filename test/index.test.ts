@@ -1,18 +1,19 @@
 import { setTimeout } from 'node:timers/promises'
-import { describe, expect, test } from 'vitest'
+import { describe, expect, it } from 'vitest'
 import type { Plugin } from '~/index'
-import { Voie, cors, logger } from '~/index'
+import { Voie, logger } from '~/index'
+import { cors } from '~/plugins'
 import { decodeResponse, fakeEvent } from '~/utils'
 
-function _parseBody(res) {
+function _parseBody(res: any) {
   res.body = JSON.parse(res.body)
   return res
 }
 
-describe('Voie init', () => {
+describe('voie init', () => {
   let app: Voie
 
-  test('initialize', () => {
+  it('initialize', () => {
     expect(app = new Voie()).toBeTruthy()
   })
 
@@ -20,7 +21,7 @@ describe('Voie init', () => {
 
   const reInit = () => app = new Voie()
 
-  test('health check without plugins', () => {
+  it('health check without plugins', () => {
     expect(app.route('GET', '/health', event => app.response(200, { message: 'halo', routeInfo: event.route })))
       .toBeTruthy()
 
@@ -36,8 +37,10 @@ describe('Voie init', () => {
     reInit()
   })
 
-  test('health async check without plugins', async () => {
-    expect(app.route('GET', '/healthAsync', async (event) => { await setTimeout(50); return app.response(200, { message: 'halo', routeInfo: event.route }) }))
+  it('health async check without plugins', async () => {
+    expect(app.route('GET', '/healthAsync', async (event) => {
+      await setTimeout(50); return app.response(200, { message: 'halo', routeInfo: event.route })
+    }))
       .toBeTruthy()
 
     let handler: ReturnType<Voie['handle']>
@@ -53,7 +56,7 @@ describe('Voie init', () => {
   })
 
   describe('registering plugins', () => {
-    test('plugin that register GET /pdummy route', () => {
+    it('plugin that register GET /pdummy route', () => {
       const _plugin: Plugin<Voie> = (instance, options) => {
         instance.route('GET', '/pdummy', () => app.response(200, 'Success'))
       }
@@ -64,7 +67,7 @@ describe('Voie init', () => {
         .toMatchObject({ method: 'GET', path: '/pdummy' }) // Expect the route to be defined
     })
 
-    test('plugin that enables cors', () => {
+    it('plugin that enables cors', () => {
       expect(app.use(cors))
         .toEqual(app)
     })
@@ -72,26 +75,26 @@ describe('Voie init', () => {
 
   describe('registering routes', () => {
     describe('normal routes', () => {
-      test('GET /compressed', () => {
+      it('gET /compressed', () => {
         expect(app.route('GET', '/compressed', event => app.response(200, { message: 'Success', luckyNumber: 69 }, { compress: 1 })))
           .toBeTruthy()
       })
 
-      test('GET /params', () => {
+      it('gET /params', () => {
         expect(app.route('GET', '/params', event => (
           { statusCode: 200, body: 'Success', params: event.route.params }
         )))
           .toBeTruthy()
       })
 
-      test('GET /params/:parametric', () => {
+      it('gET /params/:parametric', () => {
         expect(app.route('GET', '/params/:parametric', event => (
           { statusCode: 200, body: 'Success', params: event.route.params }
         )))
           .toBeTruthy()
       })
 
-      test('GET /before-middleware', () => {
+      it('gET /before-middleware', () => {
         expect(app.route('GET', '/before-middleware', event => (
           { statusCode: 200, body: 'Success', itWorks: event.itWorks }
         )))
@@ -101,7 +104,7 @@ describe('Voie init', () => {
           .toBeTruthy()
       })
 
-      test('GET /after-middleware', () => {
+      it('gET /after-middleware', () => {
         expect(app.route('GET', '/after-middleware', (event, context) => (
           { statusCode: 200, body: 'Success', itWorks: event.itWorks }
         )))
@@ -111,7 +114,7 @@ describe('Voie init', () => {
           .toBeTruthy()
       })
 
-      test('GET /after-middleware2', () => {
+      it('gET /after-middleware2', () => {
         expect(app.route('GET', '/after-middleware2', () => (
           { statusCode: 200, body: 'Success', itWorks: null }
         )))
@@ -125,24 +128,24 @@ describe('Voie init', () => {
 
   describe('executing handlers', () => {
     let handler: ReturnType<Voie['handle']>
-    test('make handler', () => {
+    it('make handler', () => {
       expect(handler = app.handle())
         .toBeTruthy()
     })
 
-    test('call handler with empty event', async () => {
-      await expect(handler({}, {} as any))
-        .rejects.toThrow()
+    it('call handler with empty event', async () => {
+      await expect(handler({}, {} as any).then(decodeResponse))
+        .resolves.toEqual({ statusCode: 500, body: { message: 'Empty route lookup' } })
     })
 
     describe('defaultRoute tests', () => {
-      test('normal', () => {
+      it('normal', () => {
         app.setDefaultRoute((event, context) => ({ event, context }))
         expect(handler(fakeEvent('GET', '/testDR', { headers: { origin: 'test' } }), {} as any))
           .resolves.toEqual(expect.objectContaining({ event: expect.any(Object) }))
       })
 
-      test('passthrough', () => {
+      it('passthrough', () => {
         app.setDefaultRoute((event, context) => ({ event, context }), true)
         expect(handler(fakeEvent('GET', '/testDR', { headers: { origin: 'test' } }), { contextTest: 'halo' } as any))
           .resolves.toEqual({
@@ -153,49 +156,49 @@ describe('Voie init', () => {
     })
 
     describe('normal routes', () => {
-      test('OPTIONS /compressed', () => {
+      it('oPTIONS /compressed', () => {
         expect(handler(fakeEvent('OPTIONS', '/compressed', { headers: { origin: 'test' } }), {} as any))
           .resolves.toMatchObject(
             { statusCode: 204, headers: ({ 'Access-Control-Allow-Credentials': true, 'Access-Control-Allow-Origin': 'test' }) },
           )
       })
 
-      test('GET /compressed and cors', () => {
+      it('gET /compressed and cors', () => {
         expect(handler(fakeEvent('GET', '/compressed', { headers: { 'accept-encoding': 'br', 'origin': 'test' } }), {} as any))
           .resolves.toMatchObject(
             { statusCode: 200, isBase64Encoded: true, headers: ({ 'Access-Control-Allow-Credentials': true, 'Access-Control-Allow-Origin': 'test' }) },
           )
       })
 
-      test('GET /compressed, decodeResponse', () => {
+      it('gET /compressed, decodeResponse', () => {
         expect(handler(fakeEvent('GET', '/compressed', { headers: { 'accept-encoding': 'br' } }), {} as any).then(decodeResponse))
           .resolves.toMatchObject(
             { body: { message: 'Success', luckyNumber: 69 } },
           )
       })
 
-      test('GET /params with searchParams', () => {
+      it('gET /params with searchParams', () => {
         expect(handler(fakeEvent('GET', '/params', { rawQueryString: 'hola=333' }), {} as any))
           .resolves.toEqual(
             { statusCode: 200, body: 'Success', params: { hola: '333' } },
           )
       })
 
-      test('GET /params with postBody', () => {
+      it('gET /params with postBody', () => {
         expect(handler(fakeEvent('GET', '/params', { body: { hola: 444 } }), {} as any))
           .resolves.toEqual(
             { statusCode: 200, body: 'Success', params: { hola: 444 } },
           )
       })
 
-      test('GET /params/:parametric', () => {
+      it('gET /params/:parametric', () => {
         expect(handler(fakeEvent('GET', '/params/working'), {} as any))
           .resolves.toEqual(
             { statusCode: 200, body: 'Success', params: { parametric: 'working' } },
           )
       })
 
-      test('GET /params/:parametric with searchParams and postBody', () => {
+      it('gET /params/:parametric with searchParams and postBody', () => {
         expect(handler(fakeEvent('GET', '/params/working', {
           rawQueryString: 'hola=333&qs',
           body: { pb: true, hola: 444, parametric: 'shouldBeOverridden' },
@@ -205,19 +208,19 @@ describe('Voie init', () => {
           )
       })
 
-      test('GET /before-middleware', () => {
+      it('gET /before-middleware', () => {
         expect(handler(fakeEvent('GET', '/before-middleware'), {} as any))
           .resolves.toEqual(
             { statusCode: 200, body: 'Success', itWorks: true },
           )
       })
 
-      test('GET /after-middleware', () => {
+      it('gET /after-middleware', () => {
         expect(handler(fakeEvent('GET', '/after-middleware'), {} as any))
           .resolves.toEqual(false)
       })
 
-      test('GET /after-middleware2', () => {
+      it('gET /after-middleware2', () => {
         expect(handler(fakeEvent('GET', '/after-middleware2'), {} as any))
           .resolves.toEqual(
             { statusCode: 200, body: 'Success', itWorks: 'abracadabra' },

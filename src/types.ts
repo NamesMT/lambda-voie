@@ -42,7 +42,7 @@ export type RouteMiddlewareAfter<D> = (data: D, context: LambdaHandlerContext, r
 export type LambdaHandler = (
   event: LambdaHandlerEvent,
   context: LambdaHandlerContext,
-) => Promise<void> | Promise<LambdaHandlerResponse>
+) => Promise<LambdaHandlerResponse>
 
 export interface LambdaEventRecord {
   eventVersion: string

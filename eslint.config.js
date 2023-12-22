@@ -11,6 +11,7 @@ export default antfu(
     rules: {
       'style/no-trailing-spaces': ['error', { ignoreComments: true }],
       'style/max-statements-per-line': ['error', { max: 2 }],
+      'unused-imports/no-unused-vars': 'warn',
     },
   },
   {
