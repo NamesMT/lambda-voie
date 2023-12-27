@@ -18,7 +18,7 @@ export function fakeEvent(method: Route['method'], path: Route['path'], spread?:
   } as any as LambdaHandlerEvent
 }
 
-export function tryIt(fn: () => any, fallbackValue?: any) {
+export function tryIt<F extends (...args: any) => any, D = any>(fn: F, fallbackValue?: D): ReturnType<F> | D | undefined {
   try {
     return fn()
   }

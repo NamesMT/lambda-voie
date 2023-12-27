@@ -238,47 +238,59 @@ class Router {
       if (this.withRequest)
         this.withRequest(event, context)
 
-      try {
-        // // eventRoute processor
-        // Simple morphing for event: { eventSource:string }
-        if (event.eventSource)
-          event.Records = [event]
+      // // eventRoute processor
+      // Simple morphing for event: { eventSource:string }
+      if (event.eventSource)
+        event.Records = [event]
 
-        if (event.Records) {
-          for (const Record of event.Records as LambdaEventRecord[]) {
-            const eventRoutes = this.eventRoutes[Record.eventSource]
+      if (event.Records) {
+        for (const Record of event.Records as LambdaEventRecord[]) {
+          const eventRoutes = this.eventRoutes[Record.eventSource]
 
-            if (eventRoutes) {
-              const res: Record<EventRoute['name'], any> = {}
+          if (eventRoutes) {
+            const res: Record<EventRoute['name'], any> = {}
 
-              for (const eventRoute of Object.values(eventRoutes))
-                res[eventRoute.name] = await eventRoute.handler(Record, context)
+            for (const eventRoute of Object.values(eventRoutes)) {
+              // Force promise for cleaner catch
+              res[eventRoute.name] = await (async () => eventRoute.handler(Record, context))().catch((err: any) => {
+                if (isDevelopment)
+                  throw err
 
-              return res
+                logger.error(err)
+
+                return (err instanceof Error as any) // Cast to any because it could be anything that extends Error
+                  ? { error: true, message: err.message, code: err?.code }
+                  : { error: true, message: err }
+              })
             }
+
+            return res
           }
         }
-        // //
-
-        // // route processor
-        // Sets the current processing event to the class global
-        this.$event = event
-
-        const result = await this._lookupShims(event, context)
-
-        // Removes event from class global after finish processing
-        this.$event = undefined
-
-        return result
-        // //
       }
-      catch (err: any) {
+      // //
+
+      // // route processor
+      // Sets the current processing event to the class global
+      this.$event = event
+
+      // Force promise for cleaner catch
+      const result = await (async () => this._lookupShims(event, context))().catch((err: any) => {
         if (isDevelopment)
           throw err
 
         logger.error(err)
-        return { statusCode: 500, body: JSON.stringify({ message: err.message, code: err.code }) }
-      }
+
+        return (err instanceof Error as any) // Cast to any because it could be anything that extends Error
+          ? { statusCode: 500, body: JSON.stringify({ message: err.message, code: err?.code }) }
+          : { statusCode: 500, body: JSON.stringify({ message: err }) }
+      })
+
+      // Removes event from class global after finish processing
+      this.$event = undefined
+
+      return result
+      // //
     }
   }
 }
