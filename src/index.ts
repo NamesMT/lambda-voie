@@ -6,7 +6,7 @@ import { defu } from 'defu'
 import { isDevelopment } from 'std-env'
 import { lambdaRequestTracker } from 'pino-lambda'
 import type { EventRoute, FMWRoute, LambdaEventRecord, LambdaHandler, LambdaHandlerContext, LambdaHandlerEvent, LambdaHandlerResponse, Plugin, Route, RouteMiddlewareAfter, RouteMiddlewareBefore, RouterConstructOptions, RouterInstance } from './types'
-import { decodeBody, compress as doCompress, fakeEvent, oGet, oPathEscape, oSet, tryIt } from './utils'
+import { DetailedError, decodeBody, compress as doCompress, fakeEvent, oGet, oPathEscape, oSet, tryIt } from './utils'
 import { logger } from './logger'
 
 export * from './types'
@@ -88,7 +88,7 @@ class Router {
         return _route
 
       if (!override)
-        throw new Error('Route already exist')
+        throw new DetailedError('Route already exist', { detail: { eventSource, name } })
 
       _route.handler = handler
 
@@ -128,7 +128,7 @@ class Router {
         return _route
 
       if (!override)
-        throw new Error('Route already exist')
+        throw new DetailedError('Route already exist', { detail: { method, path } })
 
       _route.handler = handler
 
@@ -315,8 +315,11 @@ export class Voie extends Router {
       contentType = 'application/json',
     } = options
 
-    if (!event && (autoCors || compress))
-      throw new Error('event option is required if enabled: autoCors | compress')
+    if (!event && (autoCors || compress)) {
+      throw new Error(
+        `event option is required if enabled: ${[].concat(((autoCors && 'autoCors') || []), ((compress as any && 'compress') || [])).join(', ')}`,
+      )
+    }
 
     const responseObject: LambdaHandlerResponse = {
       statusCode,

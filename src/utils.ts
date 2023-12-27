@@ -65,6 +65,22 @@ export function oSet(obj: any, path: string | string[], value: any, create = tru
   return _obj[_path]
 }
 
+export class DetailedError extends Error {
+  /**
+   * Additional message that will be logged AND returned to client
+   */
+  public detail?: any
+  /**
+   * Additional code that will be logged AND returned to client
+   */
+  public code?: any
+
+  constructor(message: string, options: { detail?: any, cause?: any } = {}) {
+    super(message, { cause: options.cause })
+    this.detail = options.detail
+  }
+}
+
 /**
  * Compress inputted data, `response` could be passed in to mutate it.
  */
