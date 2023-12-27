@@ -75,26 +75,26 @@ describe('voie init', () => {
 
   describe('registering routes', () => {
     describe('normal routes', () => {
-      it('gET /compressed', () => {
+      it('do GET /compressed', () => {
         expect(app.route('GET', '/compressed', event => app.response(200, { message: 'Success', luckyNumber: 69 }, { compress: 1 })))
           .toBeTruthy()
       })
 
-      it('gET /params', () => {
+      it('do GET /params', () => {
         expect(app.route('GET', '/params', event => (
           { statusCode: 200, body: 'Success', params: event.route.params }
         )))
           .toBeTruthy()
       })
 
-      it('gET /params/:parametric', () => {
+      it('do GET /params/:parametric', () => {
         expect(app.route('GET', '/params/:parametric', event => (
           { statusCode: 200, body: 'Success', params: event.route.params }
         )))
           .toBeTruthy()
       })
 
-      it('gET /before-middleware', () => {
+      it('do GET /before-middleware', () => {
         expect(app.route('GET', '/before-middleware', event => (
           { statusCode: 200, body: 'Success', itWorks: event.itWorks }
         )))
@@ -104,7 +104,7 @@ describe('voie init', () => {
           .toBeTruthy()
       })
 
-      it('gET /after-middleware', () => {
+      it('do GET /after-middleware', () => {
         expect(app.route('GET', '/after-middleware', (event, context) => (
           { statusCode: 200, body: 'Success', itWorks: event.itWorks }
         )))
@@ -114,7 +114,7 @@ describe('voie init', () => {
           .toBeTruthy()
       })
 
-      it('gET /after-middleware2', () => {
+      it('do GET /after-middleware2', () => {
         expect(app.route('GET', '/after-middleware2', () => (
           { statusCode: 200, body: 'Success', itWorks: null }
         )))
@@ -163,42 +163,42 @@ describe('voie init', () => {
           )
       })
 
-      it('gET /compressed and cors', () => {
+      it('do GET /compressed and cors', () => {
         expect(handler(fakeEvent('GET', '/compressed', { headers: { 'accept-encoding': 'br', 'origin': 'test' } }), {} as any))
           .resolves.toMatchObject(
             { statusCode: 200, isBase64Encoded: true, headers: ({ 'Access-Control-Allow-Credentials': true, 'Access-Control-Allow-Origin': 'test' }) },
           )
       })
 
-      it('gET /compressed, decodeResponse', () => {
+      it('do GET /compressed, decodeResponse', () => {
         expect(handler(fakeEvent('GET', '/compressed', { headers: { 'accept-encoding': 'br' } }), {} as any).then(decodeResponse))
           .resolves.toMatchObject(
             { body: { message: 'Success', luckyNumber: 69 } },
           )
       })
 
-      it('gET /params with searchParams', () => {
+      it('do GET /params with searchParams', () => {
         expect(handler(fakeEvent('GET', '/params', { rawQueryString: 'hola=333' }), {} as any))
           .resolves.toEqual(
             { statusCode: 200, body: 'Success', params: { hola: '333' } },
           )
       })
 
-      it('gET /params with postBody', () => {
+      it('do GET /params with postBody', () => {
         expect(handler(fakeEvent('GET', '/params', { body: { hola: 444 } }), {} as any))
           .resolves.toEqual(
             { statusCode: 200, body: 'Success', params: { hola: 444 } },
           )
       })
 
-      it('gET /params/:parametric', () => {
+      it('do GET /params/:parametric', () => {
         expect(handler(fakeEvent('GET', '/params/working'), {} as any))
           .resolves.toEqual(
             { statusCode: 200, body: 'Success', params: { parametric: 'working' } },
           )
       })
 
-      it('gET /params/:parametric with searchParams and postBody', () => {
+      it('do GET /params/:parametric with searchParams and postBody', () => {
         expect(handler(fakeEvent('GET', '/params/working', {
           rawQueryString: 'hola=333&qs',
           body: { pb: true, hola: 444, parametric: 'shouldBeOverridden' },
@@ -208,19 +208,19 @@ describe('voie init', () => {
           )
       })
 
-      it('gET /before-middleware', () => {
+      it('do GET /before-middleware', () => {
         expect(handler(fakeEvent('GET', '/before-middleware'), {} as any))
           .resolves.toEqual(
             { statusCode: 200, body: 'Success', itWorks: true },
           )
       })
 
-      it('gET /after-middleware', () => {
+      it('do GET /after-middleware', () => {
         expect(handler(fakeEvent('GET', '/after-middleware'), {} as any))
           .resolves.toEqual(false)
       })
 
-      it('gET /after-middleware2', () => {
+      it('do GET /after-middleware2', () => {
         expect(handler(fakeEvent('GET', '/after-middleware2'), {} as any))
           .resolves.toEqual(
             { statusCode: 200, body: 'Success', itWorks: 'abracadabra' },
