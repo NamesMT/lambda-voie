@@ -1,6 +1,23 @@
 # Changelog
 
 
+## v0.10.1
+
+[compare changes](https://github.com/namesmt/lambda-voie/compare/v0.10.0...v0.10.1)
+
+### 🚀 Enhancements
+
+- Adds `DetailedError` class ([84c99f5](https://github.com/namesmt/lambda-voie/commit/84c99f5))
+- **handler:** Better catch handle ([a2efa0f](https://github.com/namesmt/lambda-voie/commit/a2efa0f))
+
+### ✅ Tests
+
+- Wording ([5e8eb92](https://github.com/namesmt/lambda-voie/commit/5e8eb92))
+
+### ❤️ Contributors
+
+- NamesMT ([@NamesMT](http://github.com/NamesMT))
+
 ## v0.10.0
 
 [compare changes](https://github.com/namesmt/lambda-voie/compare/v0.3.1...v0.10.0)
