@@ -1,6 +1,32 @@
 # Changelog
 
 
+## v0.11.0
+
+[compare changes](https://github.com/namesmt/lambda-voie/compare/v0.10.1...v0.11.0)
+
+### 🚀 Enhancements
+
+- **response:** ⚠️  Only stringifies body when needed ([583f6fd](https://github.com/namesmt/lambda-voie/commit/583f6fd))
+- Only auto set contentType='application/json' for plain object/array ([35d0577](https://github.com/namesmt/lambda-voie/commit/35d0577))
+
+### 🩹 Fixes
+
+- **response:** AutoCors broke because response no longer stringified ([ef4f99d](https://github.com/namesmt/lambda-voie/commit/ef4f99d))
+- Options.contentType ([94373bb](https://github.com/namesmt/lambda-voie/commit/94373bb))
+
+### 💅 Refactors
+
+- Remove default response logging ([19d3791](https://github.com/namesmt/lambda-voie/commit/19d3791))
+
+#### ⚠️ Breaking Changes
+
+- **response:** ⚠️  Only stringifies body when needed ([583f6fd](https://github.com/namesmt/lambda-voie/commit/583f6fd))
+
+### ❤️ Contributors
+
+- NamesMT ([@NamesMT](http://github.com/NamesMT))
+
 ## v0.10.1
 
 [compare changes](https://github.com/namesmt/lambda-voie/compare/v0.10.0...v0.10.1)
