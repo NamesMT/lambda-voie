@@ -324,7 +324,7 @@ export class Voie extends Router {
         && this._lookupShims(fakeEvent('OPTIONS', event.route.path)).body === 'cors' // Finally, tries the OPTIONS route to see if cors is enabled.
       ), // #2
       compress,
-      contentType = 'application/json',
+      contentType = toString(body).match(/(Object|Array)\]$/) && 'application/json',
     } = options
 
     if (!event && (autoCors || compress)) {
