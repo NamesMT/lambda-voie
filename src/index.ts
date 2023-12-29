@@ -353,7 +353,7 @@ export class Voie extends Router {
 
         ...contentType
           ? {
-              'Content-Type': 'application/json',
+              'Content-Type': contentType,
             }
           : undefined,
 
