@@ -4,6 +4,7 @@ import type { Logger } from 'pino'
 import { defu } from 'defu'
 import { isDevelopment } from 'std-env'
 import { lambdaRequestTracker } from 'pino-lambda'
+import { toString } from '@namesmt/utils'
 import type { EventRoute, FMWRoute, LambdaEventRecord, LambdaHandler, LambdaHandlerContext, LambdaHandlerEvent, LambdaHandlerResponse, Plugin, Route, RouteMiddlewareAfter, RouteMiddlewareBefore, RouterConstructOptions, RouterInstance } from './types'
 import { DetailedError, decodeBody, compress as doCompress, fakeEvent, oGet, oPathEscape, oSet, tryIt } from './utils'
 import { logger } from './logger'
@@ -358,7 +359,9 @@ export class Voie extends Router {
 
         ...headers,
       },
-      body: JSON.stringify(body),
+      body: toString(body).match(/(Object|RegExp|Array|Function)\]$/)
+        ? JSON.stringify(body)
+        : body,
     }
 
     if (cookies) {
