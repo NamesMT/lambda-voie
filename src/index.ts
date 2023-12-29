@@ -1,5 +1,4 @@
 import FindMyWay from 'find-my-way'
-import { includeKeys } from 'filter-obj'
 import type { StatusCodes } from 'readable-http-codes'
 import type { Logger } from 'pino'
 import { defu } from 'defu'
@@ -388,11 +387,6 @@ export class Voie extends Router {
         })
       })
     }
-
-    this.logger.info({
-      statusCode,
-      info: typeof body === 'object' ? includeKeys(body, ['message', 'notice']) : body,
-    })
 
     return responseObject
   }
