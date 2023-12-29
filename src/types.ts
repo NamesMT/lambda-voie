@@ -11,7 +11,7 @@ export interface EventRoute {
   eventSource: string
   name: string
 
-  handler: (Record: LambdaEventRecord, context: LambdaHandlerContext) => any
+  handler: (record: LambdaEventRecord, context: LambdaHandlerContext) => any
   befores: RouteMiddlewareBefore<LambdaEventRecord>[]
   afters: RouteMiddlewareAfter<LambdaEventRecord>[]
 
