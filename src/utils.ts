@@ -50,6 +50,18 @@ export class DetailedError extends Error {
   }
 }
 
+export function eventMethodUrl(event: LambdaHandlerEvent) {
+  let method: string, url: string
+  if (event.rawPath)
+    [method, url] = [event.requestContext.http.method, event.rawPath]
+  else if (event.routeKey)
+    [method, url] = event.routeKey.split(' ')
+  else
+    [method, url] = ['', '']
+
+  return { method, url }
+}
+
 export function pickEventContext(event: LambdaHandlerEvent) {
   return objectPick(
     event,

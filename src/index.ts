@@ -6,7 +6,7 @@ import { isDevelopment } from 'std-env'
 import { lambdaRequestTracker } from 'pino-lambda'
 import { objectGet, objectSet, toString } from '@namesmt/utils'
 import type { EventRoute, FMWRoute, LambdaEventRecord, LambdaHandler, LambdaHandlerContext, LambdaHandlerEvent, LambdaHandlerResponse, Plugin, Route, RouteMiddlewareAfter, RouteMiddlewareBefore, RouterConstructOptions, RouterInstance } from './types'
-import { DetailedError, decodeBody, compress as doCompress, fakeEvent, tryIt } from './utils'
+import { DetailedError, decodeBody, compress as doCompress, eventMethodUrl, fakeEvent, tryIt } from './utils'
 import { logger } from './logger'
 
 export * from './types'
@@ -163,14 +163,8 @@ class Router {
   }
 
   _lookupShims(event: LambdaHandlerEvent, context: LambdaHandlerContext = {} as any) {
-    let method: string, url: string
-    if (event.rawPath)
-      [method, url] = [event.requestContext.http.method, event.rawPath]
-    else if (event.routeKey)
-      [method, url] = event.routeKey.split(' ')
-    else if (this.allowEmptyRouteLookup)
-      [method, url] = ['', '']
-    else
+    let { method, url } = eventMethodUrl(event)
+    if (!method && !this.allowEmptyRouteLookup)
       throw new Error('Empty route lookup')
 
     // We pass the rawQueryString from Lambda back to url for find-my-way to parse
