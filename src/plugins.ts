@@ -14,5 +14,5 @@ export const cors: Plugin<Voie, CorsPluginOptions> = (instance, options) => {
   const { paths } = defu(options, { paths: ['*'] })
 
   for (const path of paths)
-    instance.route('OPTIONS', path, () => instance.response(204, 'cors', { autoCors: true }))
+    instance.route('OPTIONS', path, event => instance.response(204, 'cors', { event, autoCors: true }))
 }
