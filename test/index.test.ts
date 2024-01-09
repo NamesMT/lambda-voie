@@ -153,6 +153,14 @@ describe('main test', () => {
             context: expect.objectContaining({ contextTest: 'halo' }),
           })
       })
+
+      it('reset', () => {
+        app.setDefaultRoute((event, context) => ({ reset: true }))
+        expect(handler(fakeEvent('GET', '/testDR', { headers: { origin: 'test' } }), { contextTest: 'halo' } as any))
+          .resolves.toEqual({
+            reset: true,
+          })
+      })
     })
 
     describe('normal routes', () => {
