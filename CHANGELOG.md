@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v0.12.5
+
+[compare changes](https://github.com/namesmt/lambda-voie/compare/v0.12.4...v0.12.5)
+
+### 🩹 Fixes
+
+- Some type fixes ([61c527d](https://github.com/namesmt/lambda-voie/commit/61c527d))
+
+### ❤️ Contributors
+
+- NamesMT ([@NamesMT](http://github.com/NamesMT))
+
 ## v0.12.4
 
 [compare changes](https://github.com/namesmt/lambda-voie/compare/v0.12.3...v0.12.4)
