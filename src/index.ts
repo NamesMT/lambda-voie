@@ -347,7 +347,7 @@ export class Voie extends Router {
       )
     }
 
-    const responseObject: LambdaHandlerResponse = {
+    const responseObject: LambdaHandlerResponse & { headers: { [key: string]: any } } = {
       statusCode,
       headers: {
         ...autoAllow
@@ -404,6 +404,9 @@ export class Voie extends Router {
         })
       })
     }
+
+    if (responseObject.headers['Content-Encoding'] && typeof responseObject.isBase64Encoded === 'undefined')
+      responseObject.isBase64Encoded = true
 
     return responseObject
   }

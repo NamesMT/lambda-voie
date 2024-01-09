@@ -85,6 +85,7 @@ export interface LambdaHandlerResponse {
   cookies?: string[]
   statusCode?: number
   body?: any
+  isBase64Encoded?: boolean
   [key: string]: any
 }
 
