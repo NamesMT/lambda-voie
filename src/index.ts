@@ -279,8 +279,8 @@ class Router {
         logger.error(err)
 
         return (err instanceof Error as any) // Cast to any because it could be anything that extends Error
-          ? { statusCode: 500, body: JSON.stringify({ message: err.message, code: err?.code }) }
-          : { statusCode: 500, body: JSON.stringify({ message: err }) }
+          ? { statusCode: err?.statusCode || 500, body: JSON.stringify({ message: err.message, code: err?.code }) }
+          : { statusCode: err?.statusCode || 500, body: JSON.stringify({ message: err }) }
       })
 
       // Removes event from class global after finish processing
@@ -333,7 +333,8 @@ export class Voie extends Router {
       autoAllow = true,
       autoCors =
       (
-        event.requestContext?.http?.method !== 'OPTIONS' // Bypass on OPTIONS call
+        event
+        && event.requestContext?.http?.method !== 'OPTIONS' // Bypass on OPTIONS call
         && event.route.method // Make sure this a valid URL invoke
         && this._lookupShims(fakeEvent('OPTIONS', event.route.path)).body === 'cors' // Finally, tries the OPTIONS route to see if cors is enabled.
       ), // #2
