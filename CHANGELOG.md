@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v0.12.6
+
+[compare changes](https://github.com/namesmt/lambda-voie/compare/v0.12.5...v0.12.6)
+
+### 🩹 Fixes
+
+- **plugins.cors:** `event` not exists in some cases (calling `app.response` in eventRoute) ([f21609f](https://github.com/namesmt/lambda-voie/commit/f21609f))
+
+### ❤️ Contributors
+
+- NamesMT ([@NamesMT](http://github.com/NamesMT))
+
 ## v0.12.5
 
 [compare changes](https://github.com/namesmt/lambda-voie/compare/v0.12.4...v0.12.5)
