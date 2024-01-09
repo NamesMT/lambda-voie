@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v0.12.3
+
+[compare changes](https://github.com/namesmt/lambda-voie/compare/v0.12.2...v0.12.3)
+
+### 🚀 Enhancements
+
+- **utils:** Add `pickEventContext()` ([8911935](https://github.com/namesmt/lambda-voie/commit/8911935))
+
+### ❤️ Contributors
+
+- NamesMT ([@NamesMT](http://github.com/NamesMT))
+
 ## v0.12.2
 
 [compare changes](https://github.com/namesmt/lambda-voie/compare/v0.12.1...v0.12.2)
