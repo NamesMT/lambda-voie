@@ -304,6 +304,16 @@ class Router {
 }
 
 export class Voie extends Router {
+  autoCorsCheck(event: LambdaHandlerEvent) {
+    const { method, url } = eventMethodUrl(event)
+
+    return (
+      method // Make sure this a valid URL invoke
+      && method !== 'OPTIONS' // Bypass on OPTIONS call
+      && this._lookupShims(fakeEvent('OPTIONS', url)).body === 'cors' // Finally, tries the OPTIONS route to see if cors is enabled.
+    )
+  }
+
   response(
     statusCode: StatusCodes,
     body: any,
@@ -325,13 +335,7 @@ export class Voie extends Router {
       headers = {},
       cookies,
       autoAllow = true,
-      autoCors =
-      (
-        event
-        && event.requestContext?.http?.method !== 'OPTIONS' // Bypass on OPTIONS call
-        && event.route?.method // Make sure this a valid URL invoke
-        && this._lookupShims(fakeEvent('OPTIONS', event.route.path)).body === 'cors' // Finally, tries the OPTIONS route to see if cors is enabled.
-      ), // #2
+      autoCors = this.autoCorsCheck(event), // #2
       compress,
       contentType = toString(body).match(/(Object|Array)\]$/) && 'application/json',
     } = options
