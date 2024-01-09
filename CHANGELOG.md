@@ -1,6 +1,27 @@
 # Changelog
 
 
+## v0.12.4
+
+[compare changes](https://github.com/namesmt/lambda-voie/compare/v0.12.3...v0.12.4)
+
+### 🚀 Enhancements
+
+- **utils:** Add `eventMethodUrl` ([6f330c1](https://github.com/namesmt/lambda-voie/commit/6f330c1))
+- Improve and move `autoCors` checker into a function ([037f83a](https://github.com/namesmt/lambda-voie/commit/037f83a))
+
+### 🩹 Fixes
+
+- **response:** Should optional chain `event.route.method` check ([354d8ae](https://github.com/namesmt/lambda-voie/commit/354d8ae))
+
+### ✅ Tests
+
+- Use decodeResponse ([5596090](https://github.com/namesmt/lambda-voie/commit/5596090))
+
+### ❤️ Contributors
+
+- NamesMT ([@NamesMT](http://github.com/NamesMT))
+
 ## v0.12.3
 
 [compare changes](https://github.com/namesmt/lambda-voie/compare/v0.12.2...v0.12.3)
