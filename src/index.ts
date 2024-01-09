@@ -248,23 +248,20 @@ class Router {
           const eventRoutes = this.eventRoutes[Record.eventSource]
 
           if (eventRoutes) {
-            const res: Record<EventRoute['name'], any> = {}
-
-            for (const eventRoute of Object.values(eventRoutes)) {
-              // Force promise for cleaner catch
-              res[eventRoute.name] = await (async () => eventRoute.handler(Record, context))().catch((err: any) => {
-                if (isDevelopment)
-                  throw err
-
-                logger.error(err)
-
-                return (err instanceof Error as any) // Cast to any because it could be anything that extends Error
-                  ? { error: true, message: err.message, code: err?.code }
-                  : { error: true, message: err }
-              })
+            if (eventRoutes.$) {
+              const eventRoute = eventRoutes.$
+              return await this.processRecordHandler(eventRoute.handler, Record, context)
             }
+            else {
+              const res: Record<EventRoute['name'], any> = {}
 
-            return res
+              for (const eventRoute of Object.values(eventRoutes)) {
+                // Force promise for cleaner catch
+                res[eventRoute.name] = await this.processRecordHandler(eventRoute.handler, Record, context)
+              }
+
+              return res
+            }
           }
         }
       }
@@ -292,6 +289,23 @@ class Router {
       return result
       // //
     }
+  }
+
+  async processRecordHandler(
+    handler: EventRoute['handler'],
+    record: LambdaEventRecord,
+    context: LambdaHandlerContext,
+  ) {
+    return await (async () => handler(record, context))().catch((err: any) => { // Force promise for cleaner catch
+      if (isDevelopment)
+        throw err
+
+      logger.error(err)
+
+      return (err instanceof Error as any) // Cast to any because it could be anything that extends Error
+        ? { error: true, message: err.message, code: err?.code }
+        : { error: true, message: err }
+    })
   }
 }
 
