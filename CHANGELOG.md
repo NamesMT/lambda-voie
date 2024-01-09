@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v0.12.1
+
+[compare changes](https://github.com/namesmt/lambda-voie/compare/v0.12.0...v0.12.1)
+
+### 🚀 Enhancements
+
+- **response:** Auto set `isBase64Encoded=true` if headers contains `Content-Encoding` ([0cc117e](https://github.com/namesmt/lambda-voie/commit/0cc117e))
+
+### ❤️ Contributors
+
+- NamesMT ([@NamesMT](http://github.com/NamesMT))
+
 ## v0.12.0
 
 [compare changes](https://github.com/namesmt/lambda-voie/compare/v0.11.0...v0.12.0)
