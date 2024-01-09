@@ -181,9 +181,9 @@ describe('main test', () => {
             named2: { code: 2 },
           })
 
-        expect(handler({ eventSource: 'testSource3' }, {} as any))
+        expect(handler({ eventSource: 'testSource3' }, {} as any).then(decodeResponse))
           .resolves.toMatchObject({
-            body: JSON.stringify({ message: 'Empty route lookup' }),
+            body: { message: 'Empty route lookup' },
             statusCode: 500,
           })
       })
