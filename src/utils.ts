@@ -4,7 +4,7 @@ import { Buffer } from 'node:buffer'
 import { brotliCompressSync, brotliDecompressSync, gunzipSync, gzipSync, constants as zlibConstants } from 'node:zlib'
 import { defu } from 'defu'
 import { destr } from 'destr'
-import { objectSet } from '@namesmt/utils'
+import { objectPick, objectSet } from '@namesmt/utils'
 import type { LambdaHandlerEvent, LambdaHandlerResponse, Route } from './types'
 
 export function fakeEvent(method: Route['method'], path: Route['path'], spread?: Record<string, any>) {
@@ -48,6 +48,20 @@ export class DetailedError extends Error {
     this.code = options.code
     this.statusCode = options.statusCode
   }
+}
+
+export function pickEventContext(event: LambdaHandlerEvent) {
+  return objectPick(
+    event,
+    [
+      'routeKey',
+      'rawPath',
+      'rawQueryString',
+      'headers',
+      'requestContext',
+      'isBase64Encoded',
+    ],
+  )
 }
 
 /**
