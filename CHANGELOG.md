@@ -1,6 +1,38 @@
 # Changelog
 
 
+## v0.12.0
+
+[compare changes](https://github.com/namesmt/lambda-voie/compare/v0.11.0...v0.12.0)
+
+### 🩹 Fixes
+
+- Inconsistent oGet and oSet ([f7bb14c](https://github.com/namesmt/lambda-voie/commit/f7bb14c))
+- **setDefaultRoute:** Should only set `allowEmptyRouteLookup` when `passThrough=true` ([1e650e3](https://github.com/namesmt/lambda-voie/commit/1e650e3))
+
+### 💅 Refactors
+
+- ⚠️  EventRoutes special `$` root level return ([dbe36f4](https://github.com/namesmt/lambda-voie/commit/dbe36f4))
+- Remove local oPath utils ([8b86bef](https://github.com/namesmt/lambda-voie/commit/8b86bef))
+
+### 🏡 Chore
+
+- Update deps ([d1c28ec](https://github.com/namesmt/lambda-voie/commit/d1c28ec))
+
+### ✅ Tests
+
+- Wording ([3acbdfb](https://github.com/namesmt/lambda-voie/commit/3acbdfb))
+- Reset passthrough after test it ([5d99fcc](https://github.com/namesmt/lambda-voie/commit/5d99fcc))
+- Add some tests for eventRoute() ([b71d014](https://github.com/namesmt/lambda-voie/commit/b71d014))
+
+#### ⚠️ Breaking Changes
+
+- ⚠️  EventRoutes special `$` root level return ([dbe36f4](https://github.com/namesmt/lambda-voie/commit/dbe36f4))
+
+### ❤️ Contributors
+
+- NamesMT ([@NamesMT](http://github.com/NamesMT))
+
 ## v0.11.0
 
 [compare changes](https://github.com/namesmt/lambda-voie/compare/v0.10.1...v0.11.0)
