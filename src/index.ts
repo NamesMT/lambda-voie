@@ -4,9 +4,9 @@ import type { Logger } from 'pino'
 import { defu } from 'defu'
 import { isDevelopment } from 'std-env'
 import { lambdaRequestTracker } from 'pino-lambda'
-import { toString } from '@namesmt/utils'
+import { objectGet, objectSet, toString } from '@namesmt/utils'
 import type { EventRoute, FMWRoute, LambdaEventRecord, LambdaHandler, LambdaHandlerContext, LambdaHandlerEvent, LambdaHandlerResponse, Plugin, Route, RouteMiddlewareAfter, RouteMiddlewareBefore, RouterConstructOptions, RouterInstance } from './types'
-import { DetailedError, decodeBody, compress as doCompress, fakeEvent, oGet, oPathEscape, oSet, tryIt } from './utils'
+import { DetailedError, decodeBody, compress as doCompress, fakeEvent, tryIt } from './utils'
 import { logger } from './logger'
 
 export * from './types'
@@ -65,14 +65,14 @@ class Router {
       override = false,
     } = options
 
-    const _route = oGet(this.eventRoutes, `${oPathEscape(eventSource)}.${oPathEscape(name)}`)
+    const _route = objectGet(this.eventRoutes, [eventSource, name])
     if (!_route) {
       if (!handler) {
         this.logger.debug('No route nor handler')
         return
       }
 
-      return oSet(this.eventRoutes, `${eventSource}.${name}`, {
+      return objectSet(this.eventRoutes, [eventSource, name], {
         handler,
         eventSource,
         name,
