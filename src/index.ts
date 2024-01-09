@@ -335,7 +335,7 @@ export class Voie extends Router {
       (
         event
         && event.requestContext?.http?.method !== 'OPTIONS' // Bypass on OPTIONS call
-        && event.route.method // Make sure this a valid URL invoke
+        && event.route?.method // Make sure this a valid URL invoke
         && this._lookupShims(fakeEvent('OPTIONS', event.route.path)).body === 'cors' // Finally, tries the OPTIONS route to see if cors is enabled.
       ), // #2
       compress,
