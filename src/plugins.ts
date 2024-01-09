@@ -1,5 +1,5 @@
 import { defu } from 'defu'
-import { oGet } from './utils'
+import { objectGet } from '@namesmt/utils'
 import type { Plugin, Route } from './types'
 import type { Voie } from '.'
 
@@ -10,7 +10,7 @@ export interface CorsPluginOptions {
   paths?: Route['path'][]
 }
 export const cors: Plugin<Voie, CorsPluginOptions> = (instance, options) => {
-  const pluginData = oGet(instance, '__pluginData__.cors', true)
+  const pluginData = objectGet(instance, '__pluginData__.cors', true)
   const { paths } = defu(options, { paths: ['*'] })
 
   for (const path of paths)

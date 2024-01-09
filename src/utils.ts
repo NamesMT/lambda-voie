@@ -4,6 +4,7 @@ import { Buffer } from 'node:buffer'
 import { brotliCompressSync, brotliDecompressSync, gunzipSync, gzipSync, constants as zlibConstants } from 'node:zlib'
 import { defu } from 'defu'
 import { destr } from 'destr'
+import { objectSet } from '@namesmt/utils'
 import type { LambdaHandlerEvent, LambdaHandlerResponse, Route } from './types'
 
 export function fakeEvent(method: Route['method'], path: Route['path'], spread?: Record<string, any>) {
@@ -25,44 +26,6 @@ export function tryIt<F extends (...args: any) => any, D = any>(fn: F, fallbackV
   catch (error) {
     return fallbackValue
   }
-}
-
-export const oPathEscape = (str: string) => str.replaceAll('.', '`o\\.')
-export const oPathUnescape = (str: string) => str.replaceAll('`o\\.', '.')
-
-export function oPathStringToArray(string: string | string[]): string[] {
-  if (!Array.isArray(string))
-    string = string.toString().match(/(\\\.|[^.[\]])+/g) || []
-  return string.map(oPathUnescape)
-}
-
-export function oGet(obj: any, path: string | string[], create?: boolean) {
-  if (Object(obj) !== obj)
-    return obj
-
-  path = oPathStringToArray(path)
-
-  return path.reduce((prev, curr) => {
-    if (create && prev)
-      prev[curr] = prev[curr] ?? {}
-
-    return prev && prev[curr]
-  }, obj)
-}
-
-export function oSet(obj: any, path: string | string[], value: any, create = true) {
-  if (Object(obj) !== obj)
-    return obj
-
-  path = oPathStringToArray(path)
-
-  const _path = path.splice(-1)[0]
-
-  const _obj = oGet(obj, path, create)
-
-  _obj[_path] = value
-
-  return _obj[_path]
 }
 
 export class DetailedError extends Error {
@@ -111,7 +74,7 @@ export function compress(data: any, options: { response?: LambdaHandlerResponse,
 
   if (result) {
     if (response) {
-      oSet(response, 'headers.Content-Encoding', result.encoding)
+      objectSet(response, 'headers.Content-Encoding', result.encoding)
       response.body = result.data.toString('base64')
       response.isBase64Encoded = true
     }
