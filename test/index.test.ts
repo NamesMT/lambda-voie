@@ -10,7 +10,7 @@ function _parseBody(res: any) {
   return res
 }
 
-describe('voie init', () => {
+describe('main test', () => {
   let app: Voie
 
   it('initialize', () => {
@@ -156,7 +156,7 @@ describe('voie init', () => {
     })
 
     describe('normal routes', () => {
-      it('oPTIONS /compressed', () => {
+      it('do OPTIONS /compressed', () => {
         expect(handler(fakeEvent('OPTIONS', '/compressed', { headers: { origin: 'test' } }), {} as any))
           .resolves.toMatchObject(
             { statusCode: 204, headers: ({ 'Access-Control-Allow-Credentials': true, 'Access-Control-Allow-Origin': 'test' }) },
