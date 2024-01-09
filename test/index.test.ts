@@ -201,6 +201,12 @@ describe('main test', () => {
 
         expect(handler({ eventSource: 'testSourceRoot' }, {} as any))
           .resolves.toStrictEqual({ code: 2 })
+
+        expect(app.eventRoute('testSourceRootString', '$', () => ('hello')))
+          .toBeTruthy()
+
+        expect(handler({ eventSource: 'testSourceRootString' }, {} as any))
+          .resolves.toBe('hello')
       })
     })
 
