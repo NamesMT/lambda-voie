@@ -1,6 +1,22 @@
 # Changelog
 
 
+## v0.12.2
+
+[compare changes](https://github.com/namesmt/lambda-voie/compare/v0.12.1...v0.12.2)
+
+### 🚀 Enhancements
+
+- Extends DetailedError with `statusCode`, fixes `code` wasn't setable ([3f7584f](https://github.com/namesmt/lambda-voie/commit/3f7584f))
+
+### ✅ Tests
+
+- **eventRoute:** Add `testSourceRootString` ([f2ac94b](https://github.com/namesmt/lambda-voie/commit/f2ac94b))
+
+### ❤️ Contributors
+
+- NamesMT ([@NamesMT](http://github.com/NamesMT))
+
 ## v0.12.1
 
 [compare changes](https://github.com/namesmt/lambda-voie/compare/v0.12.0...v0.12.1)
