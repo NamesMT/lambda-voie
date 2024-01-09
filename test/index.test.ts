@@ -163,6 +163,47 @@ describe('main test', () => {
       })
     })
 
+    describe('event routes', () => {
+      it('named return', () => {
+        expect(app.eventRoute('testSource', 'named', () => ({
+          code: 1,
+        })))
+          .toBeTruthy()
+
+        expect(app.eventRoute('testSource', 'named2', () => ({
+          code: 2,
+        })))
+          .toBeTruthy()
+
+        expect(handler({ eventSource: 'testSource' }, {} as any))
+          .resolves.toStrictEqual({
+            named: { code: 1 },
+            named2: { code: 2 },
+          })
+
+        expect(handler({ eventSource: 'testSource3' }, {} as any))
+          .resolves.toMatchObject({
+            body: JSON.stringify({ message: 'Empty route lookup' }),
+            statusCode: 500,
+          })
+      })
+
+      it('$ root return', () => {
+        expect(app.eventRoute('testSourceRoot', 'named', () => ({
+          code: 1,
+        })))
+          .toBeTruthy()
+
+        expect(app.eventRoute('testSourceRoot', '$', () => ({
+          code: 2,
+        })))
+          .toBeTruthy()
+
+        expect(handler({ eventSource: 'testSourceRoot' }, {} as any))
+          .resolves.toStrictEqual({ code: 2 })
+      })
+    })
+
     describe('normal routes', () => {
       it('do OPTIONS /compressed', () => {
         expect(handler(fakeEvent('OPTIONS', '/compressed', { headers: { origin: 'test' } }), {} as any))
