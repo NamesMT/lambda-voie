@@ -307,10 +307,10 @@ export class Voie extends Router {
   autoCorsCheck(event: LambdaHandlerEvent) {
     const { method, url } = eventMethodUrl(event)
 
-    return (
+    return Boolean(
       method // Make sure this a valid URL invoke
       && method !== 'OPTIONS' // Bypass on OPTIONS call
-      && this._lookupShims(fakeEvent('OPTIONS', url)).body === 'cors' // Finally, tries the OPTIONS route to see if cors is enabled.
+      && this._lookupShims(fakeEvent('OPTIONS', url)).body === 'cors', // Finally, tries the OPTIONS route to see if cors is enabled.
     )
   }
 
@@ -342,7 +342,7 @@ export class Voie extends Router {
 
     if (!event && (autoCors || compress)) {
       throw new Error(
-        `event option is required if enabled: ${[].concat(((autoCors && 'autoCors') || []), ((compress as any && 'compress') || [])).join(', ')}`,
+        `event option is required if enabled: ${[autoCors && 'autoCors', compress && 'compress'].filter(v => Boolean(v)).join(', ')}`,
       )
     }
 
