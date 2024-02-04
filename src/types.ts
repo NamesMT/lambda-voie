@@ -2,16 +2,18 @@ import type { HTTPMethod, HTTPVersion, Handler, RouteOptions } from 'find-my-way
 import type FindMyWay from 'find-my-way'
 import type { Logger } from 'pino'
 import type { LambdaRequestTrackerOptions } from 'pino-lambda'
+import type { RequireAllOrNone } from 'type-fest'
 
 export type Plugin<Instance, PluginOptions = any> = (instance: Instance, options: PluginOptions) => any
 
 export type RouterInstance = ReturnType<typeof FindMyWay<HTTPVersion.V1>>
 
+export type EventRouteHandlerResponse = any
 export interface EventRoute {
   eventSource: string
   name: string
 
-  handler: (record: LambdaEventRecord, context: LambdaHandlerContext) => any
+  handler: (record: LambdaEventRecord, context: LambdaHandlerContext) => EventRouteHandlerResponse
   befores: RouteMiddlewareBefore<LambdaEventRecord>[]
   afters: RouteMiddlewareAfter<LambdaEventRecord>[]
 
@@ -19,8 +21,9 @@ export interface EventRoute {
   after(fn: RouteMiddlewareAfter<LambdaEventRecord>): this
 }
 
+export type RouteHandlerResponse = LambdaHandlerResponse | any
 export interface Route extends Pick<FMWRoute, 'method' | 'path'> {
-  handler: (event: LambdaHandlerEvent, context: LambdaHandlerContext) => LambdaHandlerResponse | any
+  handler: (event: LambdaHandlerEvent, context: LambdaHandlerContext) => RouteHandlerResponse
   befores: RouteMiddlewareBefore<LambdaHandlerEvent>[]
   afters: RouteMiddlewareAfter<LambdaHandlerEvent>[]
 
@@ -62,7 +65,43 @@ export interface LambdaEventRecord {
   [key: string]: any
 }
 
-export type LambdaHandlerEvent = any
+export type LambdaHandlerEvent = Record<any, any> & RequireAllOrNone<{
+  version: string
+  routeKey: string
+  rawPath: string
+  rawQueryString: string
+  headers: {
+    [key: string]: string
+    'accept-encoding': string
+    'host': string
+    'user-agent': string
+    'via': string
+    'x-amz-cf-id': string
+    'x-amzn-trace-id': string
+    'x-forwarded-for': string
+    'x-forwarded-port': string
+    'x-forwarded-proto': string
+  }
+  requestContext: {
+    accountId: string
+    apiId: string
+    domainName: string
+    domainPrefix: string
+    http: {
+      method: string
+      path: string
+      protocol: string
+      sourceIp: string
+      userAgent: string
+    }
+    requestId: string
+    routeKey: string
+    stage: string
+    time: string
+    timeEpoch: number
+  }
+  isBase64Encoded: boolean
+}>
 
 export interface LambdaHandlerContext {
   callbackWaitsForEmptyEventLoop: boolean

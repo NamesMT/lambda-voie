@@ -85,6 +85,7 @@
     "pino-pretty": "^10.3.1",
     "simple-git-hooks": "^2.9.0",
     "tsx": "^4.7.0",
+    "type-fest": "^4.10.2",
     "typescript": "^5.3.3",
     "unbuild": "^2.0.0",
     "vitepress": "1.0.0-rc.32",

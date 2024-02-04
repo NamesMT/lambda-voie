@@ -5,7 +5,7 @@ import { defu } from 'defu'
 import { isDevelopment } from 'std-env'
 import { lambdaRequestTracker } from 'pino-lambda'
 import { objectGet, objectSet, toString } from '@namesmt/utils'
-import type { EventRoute, FMWRoute, LambdaEventRecord, LambdaHandler, LambdaHandlerContext, LambdaHandlerEvent, LambdaHandlerResponse, Plugin, Route, RouteMiddlewareAfter, RouteMiddlewareBefore, RouterConstructOptions, RouterInstance } from './types'
+import type { EventRoute, EventRouteHandlerResponse, FMWRoute, LambdaEventRecord, LambdaHandler, LambdaHandlerContext, LambdaHandlerEvent, LambdaHandlerResponse, Plugin, Route, RouteHandlerResponse, RouteMiddlewareAfter, RouteMiddlewareBefore, RouterConstructOptions, RouterInstance } from './types'
 import { DetailedError, decodeBody, compress as doCompress, eventMethodUrl, fakeEvent, tryIt } from './utils'
 import { logger } from './logger'
 
@@ -136,19 +136,25 @@ class Router {
     }
   }
 
+  routeHandler(route: Route, data: LambdaHandlerEvent, context: LambdaHandlerContext): RouteHandlerResponse
+  routeHandler(route: EventRoute, data: LambdaEventRecord, context: LambdaHandlerContext): EventRouteHandlerResponse
   routeHandler(route: Route | EventRoute, data: LambdaHandlerEvent | LambdaEventRecord, context: LambdaHandlerContext) {
     return (route.befores.length || route.afters.length)
       ? this._routeHandler(route, data, context)
+      // @ts-expect-error 'LambdaEventRecord | LambdaHandlerEvent' not assignable to 'LambdaEventRecord & LambdaHandlerEvent'
       : route.handler(data, context)
   }
 
   async _routeHandler(route: Route | EventRoute, data: LambdaHandlerEvent | LambdaEventRecord, context: LambdaHandlerContext) {
     for (const middleware of route.befores)
+      // @ts-expect-error 'LambdaEventRecord | LambdaHandlerEvent' not assignable to 'LambdaEventRecord & LambdaHandlerEvent'
       await middleware(data, context)
 
+    // @ts-expect-error 'LambdaEventRecord | LambdaHandlerEvent' not assignable to 'LambdaEventRecord & LambdaHandlerEvent'
     let res = await route.handler(data, context)
 
     for (const middleware of route.afters)
+      // @ts-expect-error 'LambdaEventRecord | LambdaHandlerEvent' not assignable to 'LambdaEventRecord & LambdaHandlerEvent'
       res = await middleware(data, context, res) ?? res
 
     return res
@@ -335,7 +341,7 @@ export class Voie extends Router {
       headers = {},
       cookies,
       autoAllow = true,
-      autoCors = this.autoCorsCheck(event), // #2
+      autoCors = event && this.autoCorsCheck(event), // #2
       compress,
       contentType = toString(body).match(/(Object|Array)\]$/) && 'application/json',
     } = options
@@ -359,7 +365,7 @@ export class Voie extends Router {
 
         ...autoCors
           ? {
-              'Access-Control-Allow-Origin': event.headers?.origin ?? event.headers?.Origin ?? '*',
+              'Access-Control-Allow-Origin': event?.headers?.origin ?? event?.headers?.Origin ?? '*',
               'Access-Control-Allow-Credentials': true,
             }
           : undefined,
@@ -394,7 +400,7 @@ export class Voie extends Router {
       tryIt(() => {
         doCompress(responseObject.body, {
           response: responseObject,
-          acceptEncoding: event.headers?.['accept-encoding'] ?? '',
+          acceptEncoding: event?.headers?.['accept-encoding'] ?? '',
           level: compress === 'auto'
             ? responseObject.body.length < 1000000 // ~2MB
               ? 6
