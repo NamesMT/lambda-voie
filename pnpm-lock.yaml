@@ -38,6 +38,9 @@ importers:
       std-env:
         specifier: ^3.7.0
         version: 3.7.0
+      type-fest:
+        specifier: ^4.10.2
+        version: 4.10.2
     devDependencies:
       '@antfu/eslint-config':
         specifier: ^2.6.2
@@ -66,9 +69,6 @@ importers:
       tsx:
         specifier: ^4.7.0
         version: 4.7.0
-      type-fest:
-        specifier: ^4.10.2
-        version: 4.10.2
       typescript:
         specifier: ^5.3.3
         version: 5.3.3
@@ -5664,7 +5664,7 @@ packages:
   /type-fest@4.10.2:
     resolution: {integrity: sha512-anpAG63wSpdEbLwOqH8L84urkL6PiVIov3EMmgIhhThevh9aiMQov+6Btx0wldNcvm4wV+e2/Rt1QdDwKHFbHw==}
     engines: {node: '>=16'}
-    dev: true
+    dev: false
 
   /typescript@5.3.3:
     resolution: {integrity: sha512-pXWcraxM0uxAS+tN0AG/BF2TyqmHO014Z070UsJ+pFvYuRSq8KH8DmWpnbXe0pEPDHXZV3FcAbJkijJ5oNEnWw==}
