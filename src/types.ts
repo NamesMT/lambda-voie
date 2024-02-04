@@ -103,6 +103,15 @@ export type LambdaHandlerEvent = Record<any, any> & RequireAllOrNone<{
   isBase64Encoded: boolean
 }>
 
+export interface VoieRouteAdapter {
+  route: {
+    method: Route['method']
+    path: Route['path']
+    params: Record<any, any>
+    cookies?: Record<string, string>
+  }
+}
+
 export interface LambdaHandlerContext {
   callbackWaitsForEmptyEventLoop: boolean
   functionName: string
