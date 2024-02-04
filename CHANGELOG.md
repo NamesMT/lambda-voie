@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v0.12.8
+
+[compare changes](https://github.com/namesmt/lambda-voie/compare/v0.12.7...v0.12.8)
+
+### 🌊 Types
+
+- Fix cannot intersect the event's type ([4d8090a](https://github.com/namesmt/lambda-voie/commit/4d8090a))
+
+### ❤️ Contributors
+
+- NamesMT ([@NamesMT](http://github.com/NamesMT))
+
 ## v0.12.7
 
 [compare changes](https://github.com/namesmt/lambda-voie/compare/v0.12.6...v0.12.7)
