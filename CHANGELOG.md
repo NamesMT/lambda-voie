@@ -1,6 +1,23 @@
 # Changelog
 
 
+## v0.12.7
+
+[compare changes](https://github.com/namesmt/lambda-voie/compare/v0.12.6...v0.12.7)
+
+### 📦 Build
+
+- Fix build error with `type-fest` as devDep ([105ef7c](https://github.com/namesmt/lambda-voie/commit/105ef7c))
+
+### 🌊 Types
+
+- Improve `LambdaHandlerResponse` ([7f26905](https://github.com/namesmt/lambda-voie/commit/7f26905))
+- Add `VoieRouteAdapter` ([146ede6](https://github.com/namesmt/lambda-voie/commit/146ede6))
+
+### ❤️ Contributors
+
+- NamesMT ([@NamesMT](http://github.com/NamesMT))
+
 ## v0.12.6
 
 [compare changes](https://github.com/namesmt/lambda-voie/compare/v0.12.5...v0.12.6)
