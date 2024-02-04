@@ -57,7 +57,7 @@
     "test:types": "tsc --noEmit --skipLibCheck",
     "check": "pnpm lint && pnpm test:types && vitest run --coverage",
     "build": "unbuild",
-    "release": "pnpm dlx changelogen@latest --release --push --publish",
+    "release": "pnpm run test && pnpm run build && pnpm dlx changelogen@latest --release --push --publish",
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
     "docs:preview": "vitepress preview docs",
