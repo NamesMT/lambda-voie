@@ -13,7 +13,7 @@ export interface EventRoute {
   eventSource: string
   name: string
 
-  handler: (record: LambdaEventRecord, context: LambdaHandlerContext) => EventRouteHandlerResponse
+  handler(record: LambdaEventRecord, context: LambdaHandlerContext): EventRouteHandlerResponse
   befores: RouteMiddlewareBefore<LambdaEventRecord>[]
   afters: RouteMiddlewareAfter<LambdaEventRecord>[]
 
@@ -23,7 +23,7 @@ export interface EventRoute {
 
 export type RouteHandlerResponse = LambdaHandlerResponse | any
 export interface Route extends Pick<FMWRoute, 'method' | 'path'> {
-  handler: (event: LambdaHandlerEvent, context: LambdaHandlerContext) => RouteHandlerResponse
+  handler(event: LambdaHandlerEvent, context: LambdaHandlerContext): RouteHandlerResponse
   befores: RouteMiddlewareBefore<LambdaHandlerEvent>[]
   afters: RouteMiddlewareAfter<LambdaHandlerEvent>[]
 
