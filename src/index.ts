@@ -311,6 +311,7 @@ class Router<EventInterface extends HandlerEvent = HandlerEvent> {
 }
 
 export class Voie<EventInterface extends HandlerEvent = HandlerEvent & VoieEventInterfaceAdapter> extends Router {
+  declare EventInterface: EventInterface
   declare RouteInterface: Route<EventInterface>
 
   autoCorsCheck(event: EventInterface) {
