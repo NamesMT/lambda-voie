@@ -1,6 +1,26 @@
 # Changelog
 
 
+## v0.13.0
+
+[compare changes](https://github.com/namesmt/lambda-voie/compare/v0.12.8...v0.13.0)
+
+### 💅 Refactors
+
+- ⚠️  Major types refactoring, EventInterface are now supply as  type argument on creation ([8a24a0d](https://github.com/namesmt/lambda-voie/commit/8a24a0d))
+
+### 🏡 Chore
+
+- Enforce extra dry tests before releasing ([6e957d3](https://github.com/namesmt/lambda-voie/commit/6e957d3))
+
+#### ⚠️ Breaking Changes
+
+- ⚠️  Major types refactoring, EventInterface are now supply as  type argument on creation ([8a24a0d](https://github.com/namesmt/lambda-voie/commit/8a24a0d))
+
+### ❤️ Contributors
+
+- NamesMT ([@NamesMT](http://github.com/NamesMT))
+
 ## v0.12.8
 
 [compare changes](https://github.com/namesmt/lambda-voie/compare/v0.12.7...v0.12.8)
