@@ -3,6 +3,7 @@ import type FindMyWay from 'find-my-way'
 import type { Logger } from 'pino'
 import type { LambdaRequestTrackerOptions } from 'pino-lambda'
 import type { Promisable, RequireAllOrNone } from 'type-fest'
+import type { Router } from './index'
 
 export type RouterInstance = ReturnType<typeof FindMyWay<HTTPVersion.V1>>
 
@@ -16,7 +17,7 @@ export interface FMWRoute {
   store?: Record<any, any>
 }
 
-export type Plugin<Instance, PluginOptions = any> = (instance: Instance, options: PluginOptions) => any
+export type Plugin<Instance extends Router<any>, PluginOptions = any> = (instance: Instance, options: PluginOptions) => any
 
 export type HandlerEvent =
   Record<any, any>

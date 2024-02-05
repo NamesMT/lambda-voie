@@ -9,7 +9,7 @@ export interface CorsPluginOptions {
   /** @default "['*']" */
   paths?: Route<any>['path'][]
 }
-export const cors: Plugin<Voie, CorsPluginOptions> = (instance, options) => {
+export const cors: Plugin<Voie<any>, CorsPluginOptions> = (instance, options) => {
   const pluginData = objectGet(instance, '__pluginData__.cors', true)
   const { paths } = defu(options, { paths: ['*'] })
 

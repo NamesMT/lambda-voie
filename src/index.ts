@@ -16,7 +16,7 @@ export * from './logger'
 
 // TODO: maybe we should move base Router class to a new minimal not opinionated package?
 // TODO: consider patching and ship customized version of find-my-way instead of using too much type overriding.
-class Router<EventInterface extends HandlerEvent = HandlerEvent> {
+export class Router<EventInterface extends HandlerEvent = HandlerEvent> {
   declare EventInterface: EventInterface
   declare RouteInterface: Route<EventInterface>
 
