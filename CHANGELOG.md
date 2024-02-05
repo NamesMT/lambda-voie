@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v0.13.2
+
+[compare changes](https://github.com/namesmt/lambda-voie/compare/v0.13.1...v0.13.2)
+
+### 🌊 Types
+
+- Fix types related to `Plugin` interface ([c312f58](https://github.com/namesmt/lambda-voie/commit/c312f58))
+
+### ❤️ Contributors
+
+- NamesMT ([@NamesMT](http://github.com/NamesMT))
+
 ## v0.13.1
 
 [compare changes](https://github.com/namesmt/lambda-voie/compare/v0.13.0...v0.13.1)
