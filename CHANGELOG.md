@@ -1,6 +1,22 @@
 # Changelog
 
 
+## v0.13.1
+
+[compare changes](https://github.com/namesmt/lambda-voie/compare/v0.13.0...v0.13.1)
+
+### 🌊 Types
+
+- Fix: should override the EventInterface types ([3e260b7](https://github.com/namesmt/lambda-voie/commit/3e260b7))
+
+### 🏡 Chore
+
+- **script/release:** Fix: should not run vitest in watch mode ([9dd5d05](https://github.com/namesmt/lambda-voie/commit/9dd5d05))
+
+### ❤️ Contributors
+
+- NamesMT ([@NamesMT](http://github.com/NamesMT))
+
 ## v0.13.0
 
 [compare changes](https://github.com/namesmt/lambda-voie/compare/v0.12.8...v0.13.0)
