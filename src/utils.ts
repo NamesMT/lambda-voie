@@ -38,12 +38,17 @@ export class DetailedError extends Error {
    */
   public code?: any
   /**
+   * Additional object that will be logged AND NOT returned to client
+   */
+  public log?: any
+  /**
    * Optionally set the status code to return
    */
   public statusCode?: any
 
-  constructor(message: string, options: { detail?: any, code?: any, statusCode?: number, cause?: any } = {}) {
-    super(message, { cause: options.cause })
+  constructor(message: string, options: { detail?: any, code?: any, statusCode?: number, log?: any } = {}) {
+    super(message)
+    this.log = options.log
     this.detail = options.detail
     this.code = options.code
     this.statusCode = options.statusCode
