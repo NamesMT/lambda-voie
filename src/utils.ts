@@ -5,9 +5,9 @@ import { brotliCompressSync, brotliDecompressSync, gunzipSync, gzipSync, constan
 import { defu } from 'defu'
 import { destr } from 'destr'
 import { objectPick, objectSet } from '@namesmt/utils'
-import type { LambdaHandlerEvent, LambdaHandlerResponse, Route } from './types'
+import type { HandlerEvent, HandlerResponse, Route } from './types'
 
-export function fakeEvent(method: Route['method'], path: Route['path'], spread?: Record<string, any>) {
+export function fakeEvent(method: Route<any>['method'], path: Route<any>['path'], spread?: Record<string, any>) {
   return {
     rawPath: path,
     requestContext: {
@@ -16,7 +16,7 @@ export function fakeEvent(method: Route['method'], path: Route['path'], spread?:
       },
     },
     ...spread,
-  } as any as LambdaHandlerEvent
+  } as any as HandlerEvent
 }
 
 export function tryIt<F extends (...args: any) => any, D = any>(fn: F, fallbackValue?: D): ReturnType<F> | D | undefined {
@@ -50,7 +50,7 @@ export class DetailedError extends Error {
   }
 }
 
-export function eventMethodUrl(event: LambdaHandlerEvent) {
+export function eventMethodUrl(event: HandlerEvent) {
   let method: string, url: string
   if (event.rawPath)
     [method, url] = [event.requestContext.http.method, event.rawPath]
@@ -62,7 +62,7 @@ export function eventMethodUrl(event: LambdaHandlerEvent) {
   return { method, url }
 }
 
-export function pickEventContext(event: LambdaHandlerEvent) {
+export function pickEventContext(event: HandlerEvent) {
   return objectPick(
     event,
     [
@@ -79,7 +79,7 @@ export function pickEventContext(event: LambdaHandlerEvent) {
 /**
  * Compress inputted data, `response` could be passed in to mutate it.
  */
-export function compress(data: any, options: { response?: LambdaHandlerResponse, acceptEncoding?: string, level?: number } = {}) {
+export function compress(data: any, options: { response?: HandlerResponse, acceptEncoding?: string, level?: number } = {}) {
   const {
     acceptEncoding,
     level,
@@ -147,7 +147,7 @@ export function decodeBody(body: any) {
 /**
  * Helper to decompress and parse the response's body if needed
  */
-export function decodeResponse<R extends LambdaHandlerResponse>(response: R): R {
+export function decodeResponse<R extends HandlerResponse>(response: R): R {
   const contentEncoding = response.headers?.['Content-Encoding']
 
   let responseBody = response.body

@@ -5,7 +5,8 @@ import { defu } from 'defu'
 import { isDevelopment } from 'std-env'
 import { lambdaRequestTracker } from 'pino-lambda'
 import { objectGet, objectSet, toString } from '@namesmt/utils'
-import type { EventRoute, EventRouteHandlerResponse, FMWRoute, LambdaEventRecord, LambdaHandler, LambdaHandlerContext, LambdaHandlerEvent, LambdaHandlerResponse, Plugin, Route, RouteHandlerResponse, RouteMiddlewareAfter, RouteMiddlewareBefore, RouterConstructOptions, RouterInstance } from './types'
+import type { Promisable } from 'type-fest'
+import type { EventRoute, FMWRoute, HandlerContext, HandlerEvent, HandlerEventRecord, HandlerResponse, LambdaHandler, MiddlewareAfter, MiddlewareBefore, Plugin, Route, RouterConstructOptions, RouterInstance, VoieEventInterfaceAdapter } from './types'
 import { DetailedError, decodeBody, compress as doCompress, eventMethodUrl, fakeEvent, tryIt } from './utils'
 import { logger } from './logger'
 
@@ -15,16 +16,20 @@ export * from './logger'
 
 // TODO: maybe we should move base Router class to a new minimal not opinionated package?
 // TODO: consider patching and ship customized version of find-my-way instead of using too much type overriding.
-class Router {
+class Router<EventInterface extends HandlerEvent = HandlerEvent> {
+  declare EventInterface: EventInterface
+  declare RouteInterface: Route<EventInterface>
+
   __pluginData__: Record<string, any> = {}
-  $event?: LambdaHandlerEvent
+  $event?: EventInterface
 
   logger: Logger
   withRequest?: ReturnType<typeof lambdaRequestTracker>
 
   router: RouterInstance
 
-  routes: Record<string, Route> = {}
+  routes: Record<string, this['RouteInterface']> = {}
+
   eventRoutes: Record<string, Record<string, EventRoute>> = {}
 
   allowEmptyRouteLookup = false
@@ -50,7 +55,7 @@ class Router {
     return this.router.defaultRoute as Route['handler'] | undefined
   }
 
-  setDefaultRoute(handler: Route['handler'], passThrough = false): void {
+  setDefaultRoute(handler: this['RouteInterface']['handler'], passThrough = false): void {
     // @ts-expect-error defaultRoute does not exist
     this.router.defaultRoute = passThrough ? this.makePassThrough(handler) : this.makeOnHandler({ handler, befores: [], afters: [] })
     this.allowEmptyRouteLookup = passThrough // #1
@@ -79,8 +84,8 @@ class Router {
         befores: [],
         afters: [],
 
-        before(fn: RouteMiddlewareBefore<LambdaEventRecord>) { this.befores.push(fn); return this },
-        after(fn: RouteMiddlewareAfter<LambdaEventRecord>) { this.afters.push(fn); return this },
+        before(fn: MiddlewareBefore<HandlerEventRecord>) { this.befores.push(fn); return this },
+        after(fn: MiddlewareAfter<HandlerEventRecord>) { this.afters.push(fn); return this },
       })
     }
     else {
@@ -96,9 +101,9 @@ class Router {
     }
   }
 
-  route(method: Route['method'], path: Route['path']): Route | undefined
-  route(method: Route['method'], path: Route['path'], handler: Route['handler'], options?: { override?: boolean }): Route
-  route(method: Route['method'], path: Route['path'], handler?: Route['handler'], options: { override?: boolean } = {}) {
+  route(method: this['RouteInterface']['method'], path: this['RouteInterface']['path']): this['RouteInterface'] | undefined
+  route(method: this['RouteInterface']['method'], path: this['RouteInterface']['path'], handler: this['RouteInterface']['handler'], options?: { override?: boolean }): this['RouteInterface']
+  route(method: this['RouteInterface']['method'], path: this['RouteInterface']['path'], handler?: this['RouteInterface']['handler'], options: { override?: boolean } = {}) {
     this.logger.trace({ method, path, handler, options }, 'route()')
 
     const {
@@ -119,8 +124,8 @@ class Router {
         befores: [],
         afters: [],
 
-        before(fn: RouteMiddlewareBefore<LambdaHandlerEvent>) { this.befores.push(fn); return this },
-        after(fn: RouteMiddlewareAfter<LambdaHandlerEvent>) { this.afters.push(fn); return this },
+        before(fn: MiddlewareBefore<EventInterface>) { this.befores.push(fn); return this },
+        after(fn: MiddlewareAfter<EventInterface>) { this.afters.push(fn); return this },
       }
     }
     else {
@@ -136,25 +141,21 @@ class Router {
     }
   }
 
-  routeHandler(route: Route, data: LambdaHandlerEvent, context: LambdaHandlerContext): RouteHandlerResponse
-  routeHandler(route: EventRoute, data: LambdaEventRecord, context: LambdaHandlerContext): EventRouteHandlerResponse
-  routeHandler(route: Route | EventRoute, data: LambdaHandlerEvent | LambdaEventRecord, context: LambdaHandlerContext) {
+  routeHandler(route: this['RouteInterface'], data: EventInterface, context: HandlerContext): Promisable<HandlerResponse> | any
+  routeHandler(route: EventRoute, data: HandlerEventRecord, context: HandlerContext): Promisable<HandlerResponse> | any
+  routeHandler(route: this['RouteInterface'] | EventRoute, data: EventInterface | HandlerEventRecord, context: HandlerContext) {
     return (route.befores.length || route.afters.length)
       ? this._routeHandler(route, data, context)
-      // @ts-expect-error 'LambdaEventRecord | LambdaHandlerEvent' not assignable to 'LambdaEventRecord & LambdaHandlerEvent'
       : route.handler(data, context)
   }
 
-  async _routeHandler(route: Route | EventRoute, data: LambdaHandlerEvent | LambdaEventRecord, context: LambdaHandlerContext) {
+  async _routeHandler(route: this['RouteInterface'] | EventRoute, data: EventInterface | HandlerEventRecord, context: HandlerContext) {
     for (const middleware of route.befores)
-      // @ts-expect-error 'LambdaEventRecord | LambdaHandlerEvent' not assignable to 'LambdaEventRecord & LambdaHandlerEvent'
       await middleware(data, context)
 
-    // @ts-expect-error 'LambdaEventRecord | LambdaHandlerEvent' not assignable to 'LambdaEventRecord & LambdaHandlerEvent'
     let res = await route.handler(data, context)
 
     for (const middleware of route.afters)
-      // @ts-expect-error 'LambdaEventRecord | LambdaHandlerEvent' not assignable to 'LambdaEventRecord & LambdaHandlerEvent'
       res = await middleware(data, context, res) ?? res
 
     return res
@@ -168,7 +169,7 @@ class Router {
     return this.makeLambdaHandler()
   }
 
-  _lookupShims(event: LambdaHandlerEvent, context: LambdaHandlerContext = {} as any) {
+  _lookupShims(event: EventInterface, context: HandlerContext = {} as any) {
     let { method, url } = eventMethodUrl(event)
     if (!method && !this.allowEmptyRouteLookup)
       throw new Error('Empty route lookup')
@@ -180,32 +181,32 @@ class Router {
 
     // Using 'as any' to suppress find-my-way req and res type-check errors, it's just sugar typing and doesn't really affect anything
     // Also, correct-cast the return of lookup to Route['handler'] ReturnType
-    return this.router.lookup({ method, url } as any, { event, context } as any) as ReturnType<Route['handler']>
+    return this.router.lookup({ method, url } as any, { event, context } as any) as ReturnType<this['RouteInterface']['handler']>
   }
 
   _lookupTransform(fn: (lookupData: {
     method: string
     path: string
-    event: LambdaHandlerEvent
-    context: LambdaHandlerContext
+    event: EventInterface
+    context: HandlerContext
     params: { [k: string]: string | undefined }
     searchParams: { [k: string]: string }
   }) => any): FMWRoute['handler'] {
     return (req, res, params, _store, searchParams) => {
       const { method, url: path } = req as { method: string, url: string }
-      const { event, context } = res as any as { event: LambdaHandlerEvent, context: LambdaHandlerContext }
+      const { event, context } = res as any as { event: EventInterface, context: HandlerContext }
 
       return fn({ method, path, event, context, params, searchParams })
     }
   }
 
-  makePassThrough(handler: Route['handler']) {
+  makePassThrough(handler: this['RouteInterface']['handler']) {
     return this._lookupTransform(({ method, path, event, context, params, searchParams }) => {
       return handler(event, context)
     })
   }
 
-  makeOnHandler(route: Route) {
+  makeOnHandler(route: this['RouteInterface']) {
     return this._lookupTransform(({ method, path, event, context, params, searchParams }) => {
       // // Constructing params
       const postBody = decodeBody(event.body)
@@ -233,8 +234,8 @@ class Router {
     })
   }
 
-  makeLambdaHandler(): LambdaHandler {
-    return async (event: LambdaHandlerEvent, context: LambdaHandlerContext) => {
+  makeLambdaHandler(): LambdaHandler<EventInterface> {
+    return async (event: EventInterface, context: HandlerContext) => {
       if (this.withRequest)
         this.withRequest(event, context)
 
@@ -244,7 +245,7 @@ class Router {
         event.Records = [event]
 
       if (event.Records) {
-        for (const Record of event.Records as LambdaEventRecord[]) {
+        for (const Record of event.Records) {
           const eventRoutes = this.eventRoutes[Record.eventSource]
 
           if (eventRoutes) {
@@ -293,8 +294,8 @@ class Router {
 
   async processRecordHandler(
     handler: EventRoute['handler'],
-    record: LambdaEventRecord,
-    context: LambdaHandlerContext,
+    record: HandlerEventRecord,
+    context: HandlerContext,
   ) {
     return await (async () => handler(record, context))().catch((err: any) => { // Force promise for cleaner catch
       if (isDevelopment)
@@ -309,8 +310,10 @@ class Router {
   }
 }
 
-export class Voie extends Router {
-  autoCorsCheck(event: LambdaHandlerEvent) {
+export class Voie<EventInterface extends HandlerEvent = HandlerEvent & VoieEventInterfaceAdapter> extends Router {
+  declare RouteInterface: Route<EventInterface>
+
+  autoCorsCheck(event: EventInterface) {
     const { method, url } = eventMethodUrl(event)
 
     return Boolean(
@@ -324,7 +327,7 @@ export class Voie extends Router {
     statusCode: StatusCodes,
     body: any,
     options: {
-      event?: LambdaHandlerEvent
+      event?: EventInterface
 
       headers?: Record<string, string>
       cookies?: Record<string, string> | Array<string>
@@ -333,7 +336,7 @@ export class Voie extends Router {
       compress?: false | 'auto' | number
       contentType?: string | false
     } = {},
-  ): LambdaHandlerResponse {
+  ): HandlerResponse {
     this.logger.trace({ statusCode, body, options }, 'response()')
 
     const {
@@ -352,7 +355,7 @@ export class Voie extends Router {
       )
     }
 
-    const responseObject: LambdaHandlerResponse & { headers: { [key: string]: any } } = {
+    const responseObject: HandlerResponse & { headers: { [key: string]: any } } = {
       statusCode,
       headers: {
         ...autoAllow

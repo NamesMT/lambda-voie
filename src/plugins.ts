@@ -7,7 +7,7 @@ import type { Voie } from '.'
 // But I write it full-fledge anyway as a plugin boilerplate for copy and code readability
 export interface CorsPluginOptions {
   /** @default "['*']" */
-  paths?: Route['path'][]
+  paths?: Route<any>['path'][]
 }
 export const cors: Plugin<Voie, CorsPluginOptions> = (instance, options) => {
   const pluginData = objectGet(instance, '__pluginData__.cors', true)
