@@ -8,6 +8,13 @@
 [![Codecov][codecov-src]][codecov-href]
 [![License][license-src]][license-href]
 
+## Project archived  
+**Voie** was initially created to migrate some old projects to Typescript and a more modern router engine, aiming to be as effortlessly as possible, as well as a personal experience development *(also because there was no known good existing package that meets the needs)*.  
+For newer projects, I recommend moving to `Hono` or Unjs's `Nitro`/`H3`.  
+While a fan of Unjs, currently I would prefer `Hono` because their documentation covers a lot more things, and their middleware + generics binding + RPC is really good, also things like lambda response stream + compression just work!
+
+---
+
 **Voie** (French word for "way/path/lane/route", English for... "Very Opinionated Itinerary Editor"?)  
 Nah, just a random word I came up for this package, haha.  
 
