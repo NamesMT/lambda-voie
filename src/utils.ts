@@ -67,18 +67,33 @@ export function eventMethodUrl(event: HandlerEvent) {
   return { method, url }
 }
 
-export function pickEventContext(event: HandlerEvent) {
-  return objectPick(
-    event,
-    [
-      'routeKey',
-      'rawPath',
-      'rawQueryString',
-      'headers',
-      'requestContext',
-      'isBase64Encoded',
-    ],
-  )
+/**
+ * This utility picks the follow keys from the event: routeKey, rawPath, rawQueryString, headers, requestContext, isBase64Encoded
+ * 
+ * @param {boolean} [options.minimal] - pick only necessary contexts for a response call, that is: routeKey, rawPath, headers, requestContext.http.method
+ * @returns 
+ */
+export function pickEventContext(event: HandlerEvent, options: { minimal?: boolean } = {}) {
+  if (options.minimal) {
+    const requestContext = {
+      http: { method: event.requestContext?.http?.method },
+    }
+
+    return { ...objectPick(event, ['routeKey', 'rawPath', 'headers']), requestContext }
+  }
+  else {
+    return objectPick(
+      event,
+      [
+        'routeKey',
+        'rawPath',
+        'rawQueryString',
+        'headers',
+        'requestContext',
+        'isBase64Encoded',
+      ],
+    )
+  }
 }
 
 /**
