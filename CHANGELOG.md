@@ -1,6 +1,23 @@
 # Changelog
 
 
+## v0.13.4
+
+[compare changes](https://github.com/namesmt/lambda-voie/compare/v0.13.3...v0.13.4)
+
+### 🚀 Enhancements
+
+- **pickEventContext:** Introduce `options.minimal` ([b91e9f4](https://github.com/namesmt/lambda-voie/commit/b91e9f4))
+
+### 📖 Documentation
+
+- **README:** Prepare for archive ([83204ad](https://github.com/namesmt/lambda-voie/commit/83204ad))
+
+### ❤️ Contributors
+
+- NamesMT ([@NamesMT](http://github.com/NamesMT))
+- Trung Dang ([@NamesMT](http://github.com/NamesMT))
+
 ## v0.13.3
 
 [compare changes](https://github.com/namesmt/lambda-voie/compare/v0.13.2...v0.13.3)
